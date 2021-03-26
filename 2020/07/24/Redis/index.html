@@ -6,26 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>java多线程 | 长夜无荒</title>
+  <title>Redis学习笔记 | 长夜无荒</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一：多线程的有关概念1：概念首先提到线程就要提到进程 进程：进程就是运行中的程序，每当一个程序进入内存的时候，即变成一个进程。简单来说就是运行中的程序，具有一定的独立功能。 那么什么是线程呢？ 线程：线程是进程的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程，但是进程中是可以有多个线程的。如果一个进程中有多个线程那么这个应用程序就可以称为多线程程序。 简而言之，一个程序运行后至少">
+  <meta name="description" content="Redis是什么？Redis 是一个远程字典服务 是一个开源的使用ANSI  C 语言编写的，支持网络，可基于内存亦可以持久化的日志。KEY-VALUE 数据库 ，并且提供多钟语言的API redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。 Redis可以干嘛 内存存储，持久化，内存是断电即失的，所以说持久化很重要（">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java多线程">
-<meta property="og:url" content="http://yoursite.com/2020/01/31/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:title" content="Redis学习笔记">
+<meta property="og:url" content="http://yoursite.com/2020/07/24/Redis/index.html">
 <meta property="og:site_name" content="长夜无荒">
-<meta property="og:description" content="一：多线程的有关概念1：概念首先提到线程就要提到进程 进程：进程就是运行中的程序，每当一个程序进入内存的时候，即变成一个进程。简单来说就是运行中的程序，具有一定的独立功能。 那么什么是线程呢？ 线程：线程是进程的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程，但是进程中是可以有多个线程的。如果一个进程中有多个线程那么这个应用程序就可以称为多线程程序。 简而言之，一个程序运行后至少">
+<meta property="og:description" content="Redis是什么？Redis 是一个远程字典服务 是一个开源的使用ANSI  C 语言编写的，支持网络，可基于内存亦可以持久化的日志。KEY-VALUE 数据库 ，并且提供多钟语言的API redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。 Redis可以干嘛 内存存储，持久化，内存是断电即失的，所以说持久化很重要（">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/02/04/PWXKgUkbvdH5AVB.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/01/86GmNCqlUXzr7Qw.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/02/Vf8dnYPlI9T4pv6.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/03/qDbB1O79GFNCH8d.png">
-<meta property="og:image" content="https://www.nn04.top/images/pasted-15.png">
-<meta property="article:published_time" content="2020-01-31T08:20:17.000Z">
-<meta property="article:modified_time" content="2020-02-05T07:09:08.818Z">
+<meta property="og:image" content="https://i.loli.net/2021/03/24/6HtUmZsg4iKbQ2x.png">
+<meta property="og:image" content="https://i.loli.net/2021/03/24/IRajW8BGnKqitzx.png">
+<meta property="article:published_time" content="2020-07-24T03:22:39.000Z">
+<meta property="article:modified_time" content="2021-03-26T06:46:24.465Z">
 <meta property="article:author" content="Code Fan">
-<meta property="article:tag" content="java多线程">
+<meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/02/04/PWXKgUkbvdH5AVB.png">
+<meta name="twitter:image" content="https://i.loli.net/2021/03/24/6HtUmZsg4iKbQ2x.png">
   
     <link rel="alternative" href="/atom.xml" title="长夜无荒" type="application/atom+xml">
   
@@ -159,256 +156,588 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-java多线程" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Redis" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      java多线程
+      Redis学习笔记
     </h1>
   
 
         
         
-        <a href="/2020/01/31/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="archive-article-date">
-  	<time datetime="2020-01-31T08:20:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-31</time>
+        <a href="/2020/07/24/Redis/" class="archive-article-date">
+  	<time datetime="2020-07-24T03:22:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-24</time>
 </a>
         
       </header>
     
     <div align="center" class="post-count">
-    字数：7.7k字 | 预计阅读时长：31分钟
+    字数：5.4k字 | 预计阅读时长：24分钟
 </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一：多线程的有关概念"><a href="#一：多线程的有关概念" class="headerlink" title="一：多线程的有关概念"></a>一：多线程的有关概念</h2><h4 id="1：概念"><a href="#1：概念" class="headerlink" title="1：概念"></a>1：概念</h4><p>首先提到线程就要提到进程</p>
-<p>进程：进程就是运行中的程序，每当一个程序进入内存的时候，即变成一个进程。简单来说就是运行中的程序，具有一定的独立功能。</p>
-<p>那么什么是线程呢？</p>
-<p>线程：线程是进程的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程，但是进程中是可以有多个线程的。如果一个进程中有多个线程那么这个应用程序就可以称为多线程程序。</p>
-<p>简而言之，一个程序运行后至少有一个进程，一个进程可以包含多个线程。</p>
-<h4 id="2：线程的生命周期"><a href="#2：线程的生命周期" class="headerlink" title="2：线程的生命周期"></a>2：线程的生命周期</h4><p><img src="https://i.loli.net/2020/02/04/PWXKgUkbvdH5AVB.png" alt="_7F_SOQBCIKQ_@_R4~W~EX4.png"></p>
-<h5 id="1-新建"><a href="#1-新建" class="headerlink" title="1.新建"></a>1.新建</h5><ul>
-<li>new关键字创建了一个线程之后，该线程就处于新建状态</li>
-<li>JVM为线程分配内存，初始化成员变量值</li>
-</ul>
-<h5 id="2-就绪"><a href="#2-就绪" class="headerlink" title="2.就绪"></a>2.就绪</h5><ul>
-<li>当线程对象调用了start()方法之后，该线程处于就绪状态</li>
-<li>JVM为线程创建方法栈和程序计数器，等待线程调度器调度</li>
-</ul>
-<h5 id="3-运行"><a href="#3-运行" class="headerlink" title="3.运行"></a>3.运行</h5><ul>
-<li>就绪状态的线程获得CPU资源，开始运行run()方法，该线程进入运行状态</li>
-</ul>
-<h5 id="4-阻塞"><a href="#4-阻塞" class="headerlink" title="4.阻塞"></a>4.阻塞</h5><ul>
-<li>线程调用sleep()方法主动放弃所占用的处理器资源</li>
-<li>线程调用了一个阻塞式IO方法，在该方法返回之前，该线程被阻塞</li>
-<li>线程试图获得一个同步锁（同步监视器），但该同步锁正被其他线程所持有。</li>
-<li>线程在等待某个通知（notify）</li>
-<li>程序调用了线程的suspend()方法将该线程挂起。但这个方法容易导致死锁，所以应该尽量避免使用该方法</li>
-</ul>
-<h5 id="5-死亡"><a href="#5-死亡" class="headerlink" title="5.死亡"></a>5.死亡</h5><p>线程会以如下3种方式结束，结束后就处于死亡状态：</p>
-<ul>
-<li>run()或call()方法执行完成，线程正常结束。</li>
-</ul>
-<h2 id="二：线程的实现"><a href="#二：线程的实现" class="headerlink" title="二：线程的实现"></a>二：线程的实现</h2><h3 id="1：构造方法"><a href="#1：构造方法" class="headerlink" title="1：构造方法"></a>1：构造方法</h3><p>public Thread() :分配一个新的线程对象。 </p>
-<p>public Thread(String name) :分配一个指定名字的新的线程对象。</p>
-<p> public Thread(Runnable target) :分配一个带有指定目标新的线程对象。</p>
-<p> public Thread(Runnable target,String name) :分配一个带有指定目标新的线程对象并指定名字。</p>
-<p> 常用方法：</p>
-<p> public String getName() :获取当前线程名称。 </p>
-<p>public void start() :导致此线程开始执行; Java虚拟机调用此线程的run方法。</p>
-<p> public void run() :此线程要执行的任务在此处定义代码。</p>
-<p> public static void sleep(long millis) :使当前正在执行的线程以指定的毫秒数暂停（暂时停止执行）。 </p>
-<p>public static Thread currentThread() :返回对当前正在执行的线程对象的引用。</p>
-<h3 id="2：创建一个线程的步骤"><a href="#2：创建一个线程的步骤" class="headerlink" title="2：创建一个线程的步骤"></a>2：创建一个线程的步骤</h3><p>1.定义一个类继承Thread。</p>
-<p>2.重写run方法。</p>
-<p>3.创建子类对象，就是创建线程对象。</p>
-<p>4.调用start方法，开启线程并让线程执行，同时还会告诉jvm去调用run方法</p>
-<p>例</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">			System.out.println(getName() + <span class="string">":"</span> + i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>线程开启</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//创建线程实例</span></span><br><span class="line">		MyThread mt = <span class="keyword">new</span> MyThread();</span><br><span class="line">		<span class="comment">//修改线程名字</span></span><br><span class="line">		mt.setName(<span class="string">"tom"</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//启动线程</span></span><br><span class="line">		mt.start();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//创建线程实例</span></span><br><span class="line">		MyThread mt2 = <span class="keyword">new</span> MyThread();</span><br><span class="line">		mt2.setName(<span class="string">"jack"</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//启动线程</span></span><br><span class="line">		mt2.start();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3：实现线程二-实现Runnable接口"><a href="#3：实现线程二-实现Runnable接口" class="headerlink" title="3：实现线程二:实现Runnable接口"></a>3：实现线程二:实现Runnable接口</h3><p>创建线程的另一种方法是声明实现 Runnable 接口的类。该类然后实现 run 方法。然后创建Runnable的子类对象，传入到某个线程的构造方法中，开启线程。</p>
-<p>步骤：</p>
-<p>1、定义类实现Runnable接口。</p>
-<p>2、覆盖接口中的run方法。。</p>
-<p>3、创建Thread类的对象</p>
-<p>4、将Runnable接口的子类对象作为参数传递给Thread类的构造函数。</p>
-<p>5、调用Thread类的start方法开启线程。</p>
-<p>例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> num;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyThread</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.num = num;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">			System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + i + num);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-run和start的区别"><a href="#4-run和start的区别" class="headerlink" title="4:run和start的区别"></a>4:run和start的区别</h3><p>在多线程中用run方法，只是面向对象中调用的你线程类里面的run方法而已，并没有开启线程。而start才开启了线程。才实现了多线程。</p>
-<h2 id="三：多线程安全问题"><a href="#三：多线程安全问题" class="headerlink" title="三：多线程安全问题"></a>三：多线程安全问题</h2><h4 id="1：问题分析"><a href="#1：问题分析" class="headerlink" title="1：问题分析"></a>1：问题分析</h4><p>多线程避不开的一个问题就是安全问题，下面是一个经典的买票问题。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Tick ti = <span class="keyword">new</span> Tick();</span><br><span class="line">		Thread t1 = <span class="keyword">new</span> Thread(ti,<span class="string">"窗口1"</span>);</span><br><span class="line">		<span class="comment">//t.setName(name);</span></span><br><span class="line">		Thread t2 = <span class="keyword">new</span> Thread(ti,<span class="string">"窗口2"</span>);</span><br><span class="line">		Thread t3 = <span class="keyword">new</span> Thread(ti,<span class="string">"窗口3"</span>);</span><br><span class="line">		t1.start();</span><br><span class="line">		t2.start();</span><br><span class="line">		t3.start();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tick</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	 <span class="keyword">int</span> ticks = <span class="number">100</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>(ticks&gt;<span class="number">0</span>)&#123;<span class="comment">// t1 t2 t3</span></span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					Thread.sleep(<span class="number">100</span>);</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">				System.out.println(Thread.currentThread().getName()+<span class="string">"----"</span>+ticks--);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>结果显示如下</p>
-<p><img src="https://i.loli.net/2020/02/01/86GmNCqlUXzr7Qw.png" alt="_2XMT_KN_UG1QT3Q____CDR.png"></p>
-<p>这时候就出现了问题出现了两个相同的票据，还有0号票，这是不应该出现的情况。</p>
-<p>这种问题，几个窗口(线程)票数不同步了，这种问题称为线程不安全。 线程安全问题都是由全局变量及静态变量引起的。若每个线程中对全局变量、静态变量只有读操作，而无写 操作，一般来说，这个全局变量是线程安全的；若有多个线程同时执行写操作，一般都需要考虑线程同步， 否则的话就可能影响线程安全。</p>
-<p>所以在java中引用了同步机制（synchronize）来解决这个问题</p>
-<p>synchronize格式如下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">synchronized</span>(锁对象)&#123;</span><br><span class="line">      <span class="comment">//需要同步的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>实例如下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//synchronized:同步（锁），可以修饰代码块和方法，被修饰的代码块和方法一旦被某个线程访问，则直接锁住，其他的线程将无法访问</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">threaddemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		mythread mt=<span class="keyword">new</span> mythread();</span><br><span class="line">		Thread t1=<span class="keyword">new</span> Thread(mt,<span class="string">"微信"</span>);</span><br><span class="line">		Thread t2=<span class="keyword">new</span> Thread(mt,<span class="string">"淘票票"</span>);</span><br><span class="line">		Thread t3=<span class="keyword">new</span> Thread(mt,<span class="string">"支付宝"</span>);</span><br><span class="line">		t1.start();</span><br><span class="line">		t2.start();</span><br><span class="line">		t3.start();</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mythread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> ticket=<span class="number">100</span>;</span><br><span class="line">  Object obj=<span class="keyword">new</span> Object();</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">		<span class="keyword">if</span>(ticket&gt;<span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(<span class="number">100</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		System.out.println(Thread.currentThread().getName()+<span class="string">"----"</span>+ticket--);</span><br><span class="line">		&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2：synchronize使用注意事项"><a href="#2：synchronize使用注意事项" class="headerlink" title="2：synchronize使用注意事项"></a>2：synchronize使用注意事项</h4><ul>
-<li><p>1:明确哪些代码是多线程运行的代码</p>
+        <h1 id="Redis是什么？"><a href="#Redis是什么？" class="headerlink" title="Redis是什么？"></a>Redis是什么？</h1><p>Redis 是一个远程字典服务</p>
+<p>是一个开源的使用ANSI  C 语言编写的，支持网络，可基于内存亦可以持久化的日志。KEY-VALUE 数据库 ，并且提供多钟语言的API</p>
+<p>redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。</p>
+<h2 id><a href="#" class="headerlink" title></a></h2><h1 id="Redis可以干嘛"><a href="#Redis可以干嘛" class="headerlink" title="Redis可以干嘛"></a>Redis可以干嘛</h1><ol>
+<li><p>内存存储，持久化，内存是断电即失的，所以说持久化很重要（rdb,aof）</p>
 </li>
-<li><p>2：明确共享数据</p>
+<li><p>效率高，可以用于高速缓存</p>
 </li>
-<li><p>3：明确多线程运行代码中哪些语句是操作共享数据的</p>
+<li><p>发布订阅系统</p>
 </li>
-<li><p>4：synchronize会导致程序运行效率低下</p>
+<li><p>地图信息分析</p>
 </li>
-</ul>
-<h4 id="3：synchronize锁对象"><a href="#3：synchronize锁对象" class="headerlink" title="3：synchronize锁对象"></a>3：synchronize锁对象</h4><ul>
-<li>同步代码块：锁对象是任意对象 程序员自己指定</li>
-<li>同步非静态方法:默认锁对象是this对象 当前类对象</li>
-<li>同步静态方法:默认是那个类的class文件对象</li>
-</ul>
-<p>举例如下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">threaddemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		mythread mt1=<span class="keyword">new</span> mythread();</span><br><span class="line">		Thread t1=<span class="keyword">new</span> Thread(mt1,<span class="string">"微信"</span>);</span><br><span class="line">		Thread t2=<span class="keyword">new</span> Thread(mt1,<span class="string">"淘票票"</span>);</span><br><span class="line">		<span class="comment">//Thread t3=new Thread(mt1,"支付宝");</span></span><br><span class="line">		t1.start();</span><br><span class="line">		mt1.flag=<span class="keyword">false</span>;</span><br><span class="line">		t2.start();</span><br><span class="line">		<span class="comment">//t3.start();</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mythread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> ticket=<span class="number">100</span>;</span><br><span class="line">  <span class="comment">//Object obj=new Object();</span></span><br><span class="line">  <span class="keyword">boolean</span> flag=<span class="keyword">true</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(flag) &#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span>(ticket&gt;<span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(<span class="number">100</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		System.out.println(Thread.currentThread().getName()+<span class="string">"----"</span>+ticket--);</span><br><span class="line">		&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">				show();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(ticket&gt;<span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(<span class="number">100</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		System.out.println(Thread.currentThread().getName()+<span class="string">"----"</span>+ticket--);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>计时器，计数器（浏览量）</p>
+</li>
+</ol>
+<pre><code>特性</code></pre><ol>
+<li>多样的数据类型</li>
+<li>持久化</li>
+<li>集群</li>
+<li>事务</li>
+</ol>
+<h1 id="Redis常用指令"><a href="#Redis常用指令" class="headerlink" title="Redis常用指令"></a>Redis常用指令</h1><p>   首先在linux上安装完Redis ,以指定配置文件启动</p>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-server wxfconfig/redis.conf</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/02/02/Vf8dnYPlI9T4pv6.png" alt="26_GB_4Q0__QK___WUFXOWQ.png"></p>
-<p>运行结果如上所示,两个线程交替执行</p>
-<p>我们可以看出非静态方法，即同步函数默认的锁是this。</p>
-<p>如下演示同步静态方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">		Myth mt = <span class="keyword">new</span> Myth();</span><br><span class="line">		Thread t1 = <span class="keyword">new</span> Thread(mt, <span class="string">"t1"</span>);</span><br><span class="line">		Thread t2 = <span class="keyword">new</span> Thread(mt, <span class="string">"t2"</span>);</span><br><span class="line">		t1.start();</span><br><span class="line">		Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">		t2.start();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Myth</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="string">"t1"</span>.equals(Thread.currentThread().getName()))&#123;</span><br><span class="line">			MyTest.method1();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="string">"t2"</span>.equals(Thread.currentThread().getName()))&#123;</span><br><span class="line">			MyTest.method2();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;<span class="comment">//类锁</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">"m1"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"m2"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*运行结果为</span></span><br><span class="line"><span class="comment">m1</span></span><br><span class="line"><span class="comment">m2*/</span></span><br></pre></td></tr></table></figure>
+<p>   查看本机的6379端口的Redis服务  -p就是本机</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli -p 6379</span><br></pre></td></tr></table></figure>
 
-<h4 id="4：死锁问题"><a href="#4：死锁问题" class="headerlink" title="4：死锁问题"></a>4：死锁问题</h4><h5 id="4-1死锁分析"><a href="#4-1死锁分析" class="headerlink" title="4.1死锁分析"></a>4.1死锁分析</h5><p>死锁发生的情况一般是同步中嵌套同步，线程一拿了锁去执行她的一个程序，线程二拿了另一个锁去执行他的程序，线程一执行完了要执行下面的程序需要线程二拿了的那个锁，而线程二要执行下面的程序也需要线程一拿了那个锁。他们两个谁也不让谁拿，程序就挂了。也就停止了运行。</p>
-<p>下面是我的例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		MyDemo mo=<span class="keyword">new</span> MyDemo();</span><br><span class="line">        Thread t1=<span class="keyword">new</span> Thread(mo);</span><br><span class="line">        Thread t2=<span class="keyword">new</span> Thread(mo);</span><br><span class="line">        t1.start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">			Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">        mo.flag=<span class="keyword">false</span>;</span><br><span class="line">        t2.start();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyDemo</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object lockA=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">private</span> Object lockB=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">boolean</span> flag=<span class="keyword">true</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(flag) &#123;</span><br><span class="line">			<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(lockA) &#123;</span><br><span class="line">				System.out.println(<span class="string">"一一一"</span>);</span><br><span class="line">				<span class="keyword">synchronized</span>(lockB) &#123;</span><br><span class="line">					System.out.println(<span class="string">"2222222"</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(lockB) &#123;</span><br><span class="line">				System.out.println(<span class="string">"3333"</span>);</span><br><span class="line">				<span class="keyword">synchronized</span>(lockA) &#123;</span><br><span class="line">					System.out.println(<span class="string">"44444"</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
 
-<p>执行完后程序显示如下</p>
-<p><img src="https://i.loli.net/2020/02/03/qDbB1O79GFNCH8d.png" alt="LM_P35310SX14BN4DF7QU8S.png"></p>
-<p>这不就卡在这里了。</p>
-<h5 id="4-2死锁个人见解"><a href="#4-2死锁个人见解" class="headerlink" title="4.2死锁个人见解"></a>4.2死锁个人见解</h5><p>我的理解死锁就是，好比一个餐桌上要用叉子叉肉要用勺子喝汤，且这个桌子上只有一个勺子，一个叉子，这两个餐具就是锁，有两个吃饭的人，就是两个线程，他们一个在用勺子喝汤一个用叉子叉肉，突然喝汤的那个人想吃肉，吃肉的人想喝汤，但是他们都不想把自己餐具交换给对方，就谁也不让谁，打起来了。这饭就不吃了。也就是说这个程序就挂了。这就是死锁出现的原因。</p>
-<h5 id="4-3死锁形成的原因"><a href="#4-3死锁形成的原因" class="headerlink" title="4.3死锁形成的原因"></a>4.3死锁形成的原因</h5><p>死锁形成的原因大部分是因为同步里面嵌套同步。</p>
-<p>更详细来说有以下四点原因：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.互斥条件</span><br><span class="line">进程要求对所分配的资源（如打印机）进行排他性控制，即在一段时间内某资源仅为一个进程所占有。此时若有其他进程请求该资源，则请求进程只能等待。</span><br><span class="line">2.不可剥夺条件</span><br><span class="line">进程所获得的资源在未使用完毕之前，不能被其他进程强行夺走，即只能由获得该资源的进程自己来释放（只能是主动释放)。</span><br><span class="line">3.请求与保持条件</span><br><span class="line">进程已经保持了至少一个资源，但又提出了新的资源请求，而该资源已被其他进程占有，此时请求进程被阻塞，但对自己已获得的资源保持不放。</span><br><span class="line">4.循环等待条件</span><br><span class="line">存在一种进程资源的循环等待链，链中每一个进程已获得的资源同时被 链中下一个进程所请求。即存在一个处于等待状态的进程集合&#123;Pl, P2, …, pn&#125;，其中Pi等 待的资源被P(i+1)占有（i&#x3D;0, 1, …, n-1)，Pn等待的资源被P0占有。</span><br></pre></td></tr></table></figure>
 
-<h5 id="4-4死锁的处理"><a href="#4-4死锁的处理" class="headerlink" title="4.4死锁的处理"></a>4.4死锁的处理</h5><ul>
-<li>预防死锁：通过设置某些限制条件，去破坏产生死锁的四个必要条件中的一个或几个条件，来防止死锁的发生。</li>
-<li>避免死锁：在资源的动态分配过程中，用某种方法去防止系统进入不安全状态，从而避免死锁的发生。</li>
-<li>检测死锁：允许系统在运行过程中发生死锁，但可设置检测机构及时检测死锁的发生，并采取适当措施加以清除。</li>
-<li>解除死锁：当检测出死锁后，便采取适当措施将进程从死锁状态中解脱出来。</li>
-</ul>
-<h5 id="5-死锁预防"><a href="#5-死锁预防" class="headerlink" title="5.死锁预防"></a>5.死锁预防</h5><p>预防死锁是设法至少破坏产生死锁的四个必要条件之一,严格的防止死锁的出现。</p>
-<h6 id="5-1-破坏“互斥”条件"><a href="#5-1-破坏“互斥”条件" class="headerlink" title="5.1 破坏“互斥”条件"></a>5.1 破坏“互斥”条件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“互斥”条件是无法破坏的。因此，在死锁预防里主要是破坏其他几个必要条件，而不去涉及破坏“互斥”条件。</span><br></pre></td></tr></table></figure>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ping</span><br><span class="line">PONG</span><br><span class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> name wxf   //<span class="built_in">set</span>一个key的值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get name      //获取key的值</span><br><span class="line"><span class="string">"wxf"</span></span><br><span class="line">127.0.0.1:6379&gt; keys *     //查看所有的key</span><br><span class="line">1) <span class="string">"name"</span></span><br></pre></td></tr></table></figure>
 
-<h5 id="5-2-破坏“占有并等待”条件"><a href="#5-2-破坏“占有并等待”条件" class="headerlink" title="5.2 破坏“占有并等待”条件"></a>5.2 破坏“占有并等待”条件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">破坏“占有并等待”条件，就是在系统中不允许进程在已获得某种资源的情况下，申请其他资源。即要想出一个办法，阻止进程在持有资源的同时申请其他资源。</span><br><span class="line">方法一：</span><br><span class="line">一次性分配资源，即创建进程时，要求它申请所需的全部资源，系统或满足其所有要求，或什么也不给它。</span><br><span class="line">方法二：</span><br><span class="line">要求每个进程提出新的资源申请前，释放它所占有的资源。这样，一个进程在需要资源S时，须先把它先前占有的资源R释放掉，然后才能提出对S的申请，即使它可能很快又要用到资源R。</span><br></pre></td></tr></table></figure>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; shutdown   //关闭Redis</span><br><span class="line">not connected&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
 
-<h5 id="5-3-破坏“不可抢占”条件"><a href="#5-3-破坏“不可抢占”条件" class="headerlink" title="5.3 破坏“不可抢占”条件"></a>5.3 破坏“不可抢占”条件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">破坏“不可抢占”条件就是允许对资源实行抢夺。</span><br><span class="line">方法一：</span><br><span class="line">如果占有某些资源的一个进程进行进一步资源请求被拒绝，则该进程必须释放它最初占有的资源，如果有必要，可再次请求这些资源和另外的资源。</span><br><span class="line">方法二：</span><br><span class="line">如果一个进程请求当前被另一个进程占有的一个资源，则操作系统可以抢占另一个进程，要求它释放资源。只有在任意两个进程的优先级都不相同的条件下，方法二才能预防死锁。</span><br></pre></td></tr></table></figure>
 
-<h5 id="5-4-破坏“循环等待”条件"><a href="#5-4-破坏“循环等待”条件" class="headerlink" title="5.4 破坏“循环等待”条件"></a>5.4 破坏“循环等待”条件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">破坏“循环等待”条件的一种方法，是将系统中的所有资源统一编号，进程可在任何时刻提出资源申请，但所有申请必须按照资源的编号顺序（升序）提出。这样做就能保证系统不出现死锁。</span><br></pre></td></tr></table></figure>
 
-<h5 id="6-死锁避免"><a href="#6-死锁避免" class="headerlink" title="6.死锁避免"></a>6.死锁避免</h5><p>避免死锁不严格限制产生死锁的必要条件的存在,因为即使死锁的必要条件存在,也不一定发生死锁。</p>
-<h5 id="6-1-有序资源分配法"><a href="#6-1-有序资源分配法" class="headerlink" title="6.1 有序资源分配法"></a>6.1 有序资源分配法</h5><p>该算法实现步骤如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.必须为所有资源统一编号，例如打印机为1、传真机为2、磁盘为3等</span><br><span class="line">2.同类资源必须一次申请完，例如打印机和传真机一般为同一个机器，必须同时申请</span><br><span class="line">3.不同类资源必须按顺序申请</span><br><span class="line">例如：有两个进程P1和P2，有两个资源R1和R2</span><br><span class="line">P1请求资源：R1、R2</span><br><span class="line">P2请求资源：R1、R2</span><br><span class="line">这样就破坏了环路条件，避免了死锁的发生。</span><br></pre></td></tr></table></figure>
+<h2 id="Redis测试工具"><a href="#Redis测试工具" class="headerlink" title="Redis测试工具"></a>Redis测试工具</h2><p>   <strong>redis-benchmark.exe</strong> </p>
+<p>   <img src="https://i.loli.net/2021/03/24/6HtUmZsg4iKbQ2x.png" alt="image.png"></p>
+<p>简单测试一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#测试：100个并发连接  100000请求</span><br><span class="line">redis-benchmark -h localhost -p 6379 -c 100 -n 100000</span><br></pre></td></tr></table></figure>
 
-<h5 id="6-2-顺序加锁"><a href="#6-2-顺序加锁" class="headerlink" title="6.2 顺序加锁"></a>6.2 顺序加锁</h5><p>当多个线程需要相同的一些锁，但是按照不同的顺序加锁，死锁就很容易发生。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">例如以下两个线程就会死锁：</span><br><span class="line">Thread 1:</span><br><span class="line">lock A (when C locked) </span><br><span class="line">lock B (when C locked) </span><br><span class="line">wait for C</span><br><span class="line">Thread 2: </span><br><span class="line">wait for A </span><br><span class="line">wait for B</span><br><span class="line">lock C (when A locked)</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/03/24/IRajW8BGnKqitzx.png" alt="image.png"></p>
+<h2 id="Redis常用指令-1"><a href="#Redis常用指令-1" class="headerlink" title="Redis常用指令"></a>Redis常用指令</h2><p>首先Redis默认有16个数据库 默认使用第0个  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select 2  &#x2F;&#x2F;切换Redis数据库</span><br><span class="line">set name wxf   &#x2F;&#x2F;set一个key和值</span><br><span class="line">get name      &#x2F;&#x2F;获取key的值</span><br><span class="line">keys *     &#x2F;&#x2F;查看所有的key</span><br><span class="line">flushdb &#x2F;&#x2F;清除当前数据库</span><br><span class="line">flushall &#x2F;&#x2F;清除所有数据库</span><br></pre></td></tr></table></figure>
 
-<p>如果能确保所有的线程都是按照相同的顺序获得锁，那么死锁就不会发生。 例如以下两个线程就不会死锁</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Thread 1: </span><br><span class="line">lock A </span><br><span class="line">lock B</span><br><span class="line">lock C</span><br><span class="line">Thread 2: </span><br><span class="line">wait for A </span><br><span class="line">wait for B</span><br><span class="line">wait for C</span><br></pre></td></tr></table></figure>
+<p>Redis 5之前是单线程了6以后支持多线程了</p>
+<p>Redis是很快的，官方表示，Redis是基于内存操作，cpu不是Redis性能瓶颈，Redis的瓶颈是根据机器的内存和网络带宽，既然可以使用单线程来实现，就使用单线程了。</p>
+<p>Redis是C语言写的，官方提供的数据为100000+的QPS，完全不比同样是使用key-vale的Memecache差!</p>
+<p><strong>Redis为啥这么快呢？</strong></p>
+<p>1、误区1∶高性能的服务器一定是多线程的?</p>
+<p>2、误区2∶多线程（CPU上下文会切换!)一定比单线程效率高!<strong>不一定CPU切换效率会偏低</strong></p>
+<p>核心: redis是将所有的数据全部放在内存中的，所以说使用单线程去操作效率就是最高的，多线程(CPU上下文会切换︰耗时的操作!! !)，对于内存系统来说，如果没有上下文切换效率就是最高的!多次读写都是在一个CPU上的，在内存情况下，这个就是最佳的方案!</p>
+<hr>
+<p><strong><em>REmote DIctionary Server(Redis) 是一个由 Salvatore Sanfilippo 写的 key-value 存储系统，是跨平台的非关系型数据库。</em></strong></p>
+<p><strong><em>Redis 是一个开源的使用 ANSI C 语言编写、遵守 BSD 协议、支持网络、可基于内存、分布式、可选持久性的键值对(Key-Value)存储数据库，并提供多种语言的 API。</em></strong></p>
+<p><strong><em>Redis 通常被称为数据结构服务器，因为值（value）可以是字符串(String)、哈希(Hash)、列表(list)、集合(sets)和有序集合(sorted sets)等类型。</em></strong></p>
+<h2 id="Redis-keys-命令"><a href="#Redis-keys-命令" class="headerlink" title="Redis keys 命令"></a>Redis keys 命令</h2><table>
+<thead>
+<tr>
+<th>1</th>
+<th align="left"><a href="https://www.runoob.com/redis/keys-del.html" target="_blank" rel="noopener">DEL key</a> 该命令用于在 key 存在时删除 key。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-dump.html" target="_blank" rel="noopener">DUMP key</a>  序列化给定 key ，并返回被序列化的值。</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-exists.html" target="_blank" rel="noopener">EXISTS key</a>  检查给定 key 是否存在。</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-expire.html" target="_blank" rel="noopener">EXPIRE key</a> seconds 为给定 key 设置过期时间，以秒计。</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-expireat.html" target="_blank" rel="noopener">EXPIREAT key timestamp</a>  EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳(unix timestamp)。</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-pexpire.html" target="_blank" rel="noopener">PEXPIRE key milliseconds</a>  设置 key 的过期时间以毫秒计。</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-pexpireat.html" target="_blank" rel="noopener">PEXPIREAT key milliseconds-timestamp</a>  设置 key 过期时间的时间戳(unix timestamp) 以毫秒计</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-keys.html" target="_blank" rel="noopener">KEYS pattern</a>  查找所有符合给定模式( pattern)的 key 。</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-move.html" target="_blank" rel="noopener">MOVE key db</a>  将当前数据库的 key 移动到给定的数据库 db 当中。</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-persist.html" target="_blank" rel="noopener">PERSIST key</a>  移除 key 的过期时间，key 将持久保持。</td>
+</tr>
+<tr>
+<td>11</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-pttl.html" target="_blank" rel="noopener">PTTL key</a>  以毫秒为单位返回 key 的剩余的过期时间。</td>
+</tr>
+<tr>
+<td>12</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-ttl.html" target="_blank" rel="noopener">TTL key</a>  以秒为单位，返回给定 key 的剩余生存时间(TTL, time to live)。</td>
+</tr>
+<tr>
+<td>13</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-randomkey.html" target="_blank" rel="noopener">RANDOMKEY</a>  从当前数据库中随机返回一个 key 。</td>
+</tr>
+<tr>
+<td>14</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-rename.html" target="_blank" rel="noopener">RENAME key newkey</a>  修改 key 的名称</td>
+</tr>
+<tr>
+<td>15</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-renamenx.html" target="_blank" rel="noopener">RENAMENX key newkey</a>  仅当 newkey 不存在时，将 key 改名为 newkey 。</td>
+</tr>
+<tr>
+<td>16</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-scan.html" target="_blank" rel="noopener">SCAN cursor [MATCH pattern] [COUNT count]</a>  迭代数据库中的数据库键。</td>
+</tr>
+<tr>
+<td>17</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-type.html" target="_blank" rel="noopener">TYPE key</a>  返回 key 所储存的值的类型。</td>
+</tr>
+</tbody></table>
+<h2 id="Redis-字符串命令"><a href="#Redis-字符串命令" class="headerlink" title="Redis 字符串命令"></a>Redis 字符串命令</h2><table>
+<thead>
+<tr>
+<th>1</th>
+<th><a href="https://www.runoob.com/redis/strings-set.html" target="_blank" rel="noopener">SET key value</a>  设置指定 key 的值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td><a href="https://www.runoob.com/redis/strings-get.html" target="_blank" rel="noopener">GET key</a>  获取指定 key 的值。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="https://www.runoob.com/redis/strings-getrange.html" target="_blank" rel="noopener">GETRANGE key start end</a>  返回 key 中字符串值的子字符</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://www.runoob.com/redis/strings-getset.html" target="_blank" rel="noopener">GETSET key value</a> 将给定 key 的值设为 value ，并返回 key 的旧值(old value)。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="https://www.runoob.com/redis/strings-getbit.html" target="_blank" rel="noopener">GETBIT key offset</a> 对 key 所储存的字符串值，获取指定偏移量上的位(bit)。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="https://www.runoob.com/redis/strings-mget.html" target="_blank" rel="noopener">MGET key1 [key2..]</a> 获取所有(一个或多个)给定 key 的值。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="https://www.runoob.com/redis/strings-setbit.html" target="_blank" rel="noopener">SETBIT key offset value</a> 对 key 所储存的字符串值，设置或清除指定偏移量上的位(bit)。</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="https://www.runoob.com/redis/strings-setex.html" target="_blank" rel="noopener">SETEX key seconds value</a> 将值 value 关联到 key ，并将 key 的过期时间设为 seconds (以秒为单位)。</td>
+</tr>
+<tr>
+<td>9</td>
+<td><a href="https://www.runoob.com/redis/strings-setnx.html" target="_blank" rel="noopener">SETNX key value</a> 只有在 key 不存在时设置 key 的值。</td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="https://www.runoob.com/redis/strings-setrange.html" target="_blank" rel="noopener">SETRANGE key offset value</a> 用 value 参数覆写给定 key 所储存的字符串值，从偏移量 offset 开始。</td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="https://www.runoob.com/redis/strings-strlen.html" target="_blank" rel="noopener">STRLEN key</a> 返回 key 所储存的字符串值的长度。</td>
+</tr>
+<tr>
+<td>12</td>
+<td><a href="https://www.runoob.com/redis/strings-mset.html" target="_blank" rel="noopener">MSET key value [key value …]</a> 同时设置一个或多个 key-value 对。</td>
+</tr>
+<tr>
+<td>13</td>
+<td><a href="https://www.runoob.com/redis/strings-msetnx.html" target="_blank" rel="noopener">MSETNX key value [key value …]</a>  同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在。</td>
+</tr>
+<tr>
+<td>14</td>
+<td><a href="https://www.runoob.com/redis/strings-psetex.html" target="_blank" rel="noopener">PSETEX key milliseconds value</a> 这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位。</td>
+</tr>
+<tr>
+<td>15</td>
+<td><a href="https://www.runoob.com/redis/strings-incr.html" target="_blank" rel="noopener">INCR key</a> 将 key 中储存的数字值增一。</td>
+</tr>
+<tr>
+<td>16</td>
+<td><a href="https://www.runoob.com/redis/strings-incrby.html" target="_blank" rel="noopener">INCRBY key increment</a> 将 key 所储存的值加上给定的增量值（increment） 。</td>
+</tr>
+<tr>
+<td>17</td>
+<td><a href="https://www.runoob.com/redis/strings-incrbyfloat.html" target="_blank" rel="noopener">INCRBYFLOAT key increment</a> 将 key 所储存的值加上给定的浮点增量值（increment） 。</td>
+</tr>
+<tr>
+<td>18</td>
+<td><a href="https://www.runoob.com/redis/strings-decr.html" target="_blank" rel="noopener">DECR key</a> 将 key 中储存的数字值减一。</td>
+</tr>
+<tr>
+<td>19</td>
+<td><a href="https://www.runoob.com/redis/strings-decrby.html" target="_blank" rel="noopener">DECRBY key decrement</a> key 所储存的值减去给定的减量值（decrement） 。</td>
+</tr>
+<tr>
+<td>20</td>
+<td><a href="https://www.runoob.com/redis/strings-append.html" target="_blank" rel="noopener">APPEND key value</a> 如果 key 已经存在并且是一个字符串， APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾。</td>
+</tr>
+</tbody></table>
+<p>有个比较重要的方法以后在分布式中会用到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#setex (set with expire) #设置过期时间</span></span><br><span class="line"><span class="comment">#setnx(set if not exist) #不存在设置</span></span><br><span class="line">127.0.0.1:6379&gt; setex key3 20 <span class="string">'hello'</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; ttl key3</span><br><span class="line">(<span class="built_in">integer</span>) 15</span><br><span class="line">127.0.0.1:6379&gt; ttl key3</span><br><span class="line">(<span class="built_in">integer</span>) 10</span><br><span class="line">127.0.0.1:6379&gt; ttl key3</span><br><span class="line">(<span class="built_in">integer</span>) -2</span><br><span class="line">127.0.0.1:6379&gt; setnx mykey <span class="string">'redis'</span>  //如果mykey不存在 就创建</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; setnx mykey <span class="string">'xixi'</span>  //如果存在，创建失败也不会报错</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; get mykey</span><br><span class="line"><span class="string">"redis"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line">=================================================================================</span><br><span class="line"><span class="comment">#Redis里面的操作都是原子操作，一起成功一起失败</span></span><br><span class="line"><span class="comment">#例子如下</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3 //同时设置多个值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; keys *</span><br><span class="line">1) <span class="string">"k1"</span></span><br><span class="line">2) <span class="string">"k3"</span></span><br><span class="line">3) <span class="string">"k2"</span></span><br><span class="line">127.0.0.1:6379&gt; mget k1 k2 k3  //同时获取多个值</span><br><span class="line">1) <span class="string">"v1"</span></span><br><span class="line">2) <span class="string">"v2"</span></span><br><span class="line">3) <span class="string">"v3"</span></span><br><span class="line">127.0.0.1:6379&gt; msetnx k1 123 k4 v4 //设置k1 如果存在失败</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line"><span class="string">"v1"</span></span><br><span class="line">127.0.0.1:6379&gt; get k4 </span><br><span class="line">(nil)</span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"></span><br><span class="line">==================================================================================</span><br><span class="line"></span><br><span class="line"><span class="comment">#Redis设置对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> user:1 &#123;name:zhangsan1,age:22&#125;  设置一个user:1对象 值为json字符串来保存一个对象</span><br><span class="line">127.0.0.1:6379&gt; mset user:1:name zhangsna user:1:age 22</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; mget user:1:name</span><br><span class="line">1) <span class="string">"zhangsna"</span></span><br><span class="line">127.0.0.1:6379&gt; mget user:1:name user:1:age</span><br><span class="line">1) <span class="string">"zhangsna"</span></span><br><span class="line">2) <span class="string">"22"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line">==================================================================================</span><br><span class="line"><span class="comment">#getset 先get再set   可以用来更新数据</span></span><br><span class="line">127.0.0.1:6379&gt; GETSET db redis</span><br><span class="line">(nil)</span><br><span class="line">127.0.0.1:6379&gt; get db</span><br><span class="line"><span class="string">"redis"</span></span><br><span class="line">127.0.0.1:6379&gt; getset db mysql</span><br><span class="line"><span class="string">"redis"</span></span><br><span class="line">127.0.0.1:6379&gt; get db</span><br><span class="line"><span class="string">"mysql"</span></span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
 
-<p>按照顺序加锁是一种有效的死锁预防机制。但是，这种方式需要事先知道所有可能会用到的锁，但总有些时候是无法预知的，所以该种方式只适合特定场景。</p>
-<h5 id="6-3-限时加锁"><a href="#6-3-限时加锁" class="headerlink" title="6.3 限时加锁"></a>6.3 限时加锁</h5><p>限时加锁是线程在尝试获取锁的时候加一个超时时间，若超过这个时间则放弃对该锁请求，并回退并释放所有已经获得的锁，然后等待一段随机的时间再重试</p>
-<p>以下是一个例子，展示了两个线程以不同的顺序尝试获取相同的两个锁，在发生超时后回退并重试的场景：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Thread 1 locks A </span><br><span class="line">Thread 2 locks B </span><br><span class="line">Thread 1 attempts to lock B but is blocked </span><br><span class="line">Thread 2 attempts to lock A but is blocked </span><br><span class="line">Thread 1’s lock attempt on B times out </span><br><span class="line">Thread 1 backs up and releases A as well </span><br><span class="line">Thread 1 waits randomly (e.g. 257 millis) before retrying. </span><br><span class="line">Thread 2’s lock attempt on A times out </span><br><span class="line">Thread 2 backs up and releases B as well </span><br><span class="line">Thread 2 waits randomly (e.g. 43 millis) before retrying.</span><br></pre></td></tr></table></figure>
-
-<p>在上面的例子中，线程2比线程1早200毫秒进行重试加锁，因此它可以先成功地获取到两个锁。这时，线程1尝试获取锁A并且处于等待状态。当线程2结束时，线程1也可以顺利的获得这两个锁。</p>
-<p>这种方式有两个缺点：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.当线程数量少时，该种方式可避免死锁，但当线程数量过多，这些线程的加锁时限相同的概率就高很多，可能会导致超时后重试的死循环。</span><br><span class="line">2,Java中不能对synchronized同步块设置超时时间。你需要创建一个自定义锁，或使用Java5中java.util.concurrent包下的工具。</span><br></pre></td></tr></table></figure>
-
-<h5 id="6-4-死锁检测"><a href="#6-4-死锁检测" class="headerlink" title="6.4 死锁检测"></a>6.4 死锁检测</h5><p>预防和避免死锁系统开销大且不能充分利用资源，更好的方法是不采取任何限制性措施，而是提供检测和解脱死锁的手段，这就是死锁检测和恢复。</p>
-<p>死锁检测数据结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.E是现有资源向量（existing resource vector），代码每种已存在资源的总数</span><br><span class="line">2.A是可用资源向量（available resource vector），那么Ai表示当前可供使用的资源数（即没有被分配的资源）</span><br><span class="line">3.C是当前分配矩阵（current allocation matrix），C的第i行代表Pi当前所持有的每一种类型资源的资源数</span><br><span class="line">4.R是请求矩阵（request matrix），R的每一行代表P所需要的资源的数量</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://www.nn04.top/images/pasted-15.png" alt="img"></p>
-<p>死锁检测步骤：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.寻找一个没有结束标记的进程Pi，对于它而言R矩阵的第i行向量小于或等于A。</span><br><span class="line">2.如果找到了这样一个进程，执行该进程，然后将C矩阵的第i行向量加到A中，标记该进程，并转到第1步</span><br><span class="line">3.如果没有这样的进程，那么算法终止</span><br><span class="line">4.算法结束时，所有没有标记过的进程都是死锁进程。</span><br></pre></td></tr></table></figure>
-
-<h5 id="6-5死锁恢复"><a href="#6-5死锁恢复" class="headerlink" title="6.5死锁恢复"></a>6.5死锁恢复</h5><p>利用抢占恢复。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">临时将某个资源从它的当前所属进程转移到另一个进程。</span><br><span class="line">这种做法很可能需要人工干预，主要做法是否可行需取决于资源本身的特性。</span><br></pre></td></tr></table></figure>
-
-<p>利用回滚恢复</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">周期性的将进程的状态进行备份，当发现进程死锁后，根据备份将该进程复位到一个更早的，还没有取得所需的资源的状态，接着就把这些资源分配给其他死锁进程。</span><br></pre></td></tr></table></figure>
-
-<p>通过杀死进程恢复</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">最直接简单的方式就是杀死一个或若干个进程。</span><br><span class="line">尽可能保证杀死的进程可以从头再来而不带来副作用。</span><br></pre></td></tr></table></figure>
-
-<h3 id="四：生产者和消费者"><a href="#四：生产者和消费者" class="headerlink" title="四：生产者和消费者"></a>四：生产者和消费者</h3><p>生产者：负责给资源中保存数据（资源），当资源中的数据被放满了，这时生产者就应该停止继续保存数据。</p>
-<p>消费者：负责从资源中取出数据进行消费。当资源中的数据被取完，这时就应该停止取出数据的动作。</p>
-<p>生产者在给资源中保存数据的时候，应该需要判断资源中的数据是否已经保存满了。</p>
-<p>消费者在从资源中取出数据的时候，应该判断资源中是否有数据。</p>
-<p>下面是一个简单模拟生产者，消费者的例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">		Object obj=<span class="keyword">new</span> Object();</span><br><span class="line">		<span class="comment">//消费者</span></span><br><span class="line">		<span class="keyword">new</span> Thread() &#123;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">				<span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">					System.out.println(<span class="string">"老板我要买鸡蛋饼"</span>);</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">						obj.wait();<span class="comment">//锁住，等到释放了再执行以下代码</span></span><br><span class="line">					&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">						<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">						e.printStackTrace();</span><br><span class="line">					&#125;</span><br><span class="line">					System.out.println(<span class="string">"我大吃特吃"</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;.start();</span><br><span class="line">       Thread.sleep(<span class="number">1000</span>);<span class="comment">//模拟等待时间</span></span><br><span class="line">       <span class="comment">//生产者</span></span><br><span class="line">       <span class="keyword">new</span> Thread() &#123;</span><br><span class="line">    	   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					Thread.sleep(<span class="number">1000</span>);<span class="comment">//模拟做包子的时间</span></span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">				System.out.println(<span class="string">"鸡蛋饼做完了给你"</span>);</span><br><span class="line">				obj.notify();<span class="comment">//释放锁</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">       &#125;.start();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>下面是一个边做边取得消费者例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ex3</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Res r=<span class="keyword">new</span> Res();</span><br><span class="line">		shengchan sc=<span class="keyword">new</span> shengchan(r);</span><br><span class="line">		xiaofei xf=<span class="keyword">new</span> xiaofei(r);</span><br><span class="line">		Thread t1=<span class="keyword">new</span> Thread(sc);</span><br><span class="line">		Thread t2=<span class="keyword">new</span> Thread(xf);</span><br><span class="line">		t1.start();</span><br><span class="line">		t2.start();</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//资源类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Res</span></span>&#123;</span><br><span class="line">	String[] s=<span class="keyword">new</span> String[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">	Object obj=<span class="keyword">new</span> Object();</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (obj) &#123;</span><br><span class="line">			<span class="keyword">if</span>(s[<span class="number">0</span>]!=<span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					obj.wait();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			s[<span class="number">0</span>]=name+count;</span><br><span class="line">			count++;</span><br><span class="line">			System.out.println(<span class="string">"在这里存放"</span>+<span class="string">"======"</span>+s[<span class="number">0</span>]);</span><br><span class="line">			obj.notify();</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (obj) &#123;</span><br><span class="line">			<span class="keyword">if</span>(s[<span class="number">0</span>]==<span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					obj.wait();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">"取出======"</span>+s[<span class="number">0</span>]);</span><br><span class="line">			s[<span class="number">0</span>]=<span class="keyword">null</span>;</span><br><span class="line">			obj.notify();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">shengchan</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">     Res r;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="title">shengchan</span><span class="params">(Res r)</span> </span>&#123;</span><br><span class="line">    	 <span class="keyword">this</span>.r=r;</span><br><span class="line">     &#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> x=<span class="number">0</span>;x&lt;<span class="number">100</span>;x++) &#123;</span><br><span class="line">			r.put(<span class="string">"汉堡包"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">xiaofei</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	 Res r;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="title">xiaofei</span><span class="params">(Res r)</span> </span>&#123;</span><br><span class="line">    	 <span class="keyword">this</span>.r=r;</span><br><span class="line">     &#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> x=<span class="number">0</span>;x&lt;<span class="number">100</span>;x++) &#123;</span><br><span class="line">			r.get();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//结果如下一边存一边取</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">.......</span></span><br><span class="line"><span class="comment">在这里存放======汉堡包94</span></span><br><span class="line"><span class="comment">取出======汉堡包94</span></span><br><span class="line"><span class="comment">在这里存放======汉堡包95</span></span><br><span class="line"><span class="comment">取出======汉堡包95</span></span><br><span class="line"><span class="comment">在这里存放======汉堡包96</span></span><br><span class="line"><span class="comment">取出======汉堡包96</span></span><br><span class="line"><span class="comment">在这里存放======汉堡包97</span></span><br><span class="line"><span class="comment">取出======汉堡包97</span></span><br><span class="line"><span class="comment">在这里存放======汉堡包98</span></span><br><span class="line"><span class="comment">取出======汉堡包98</span></span><br><span class="line"><span class="comment">在这里存放======汉堡包99</span></span><br><span class="line"><span class="comment">取出======汉堡包99</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">/</span></span><br></pre></td></tr></table></figure>
-
-<p>如果希望多生产多消费如下例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadDemo</span> </span>&#123;</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * 生产者和消费者 操作同一个资源对象</span></span><br><span class="line"><span class="comment">   *   希望 多生产多消费</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	    Resouce r = <span class="keyword">new</span> Resouce();</span><br><span class="line">	    Produce pro = <span class="keyword">new</span> Produce(r);</span><br><span class="line">	    Consume con = <span class="keyword">new</span> Consume(r);</span><br><span class="line">	    Thread t1 = <span class="keyword">new</span> Thread(pro);</span><br><span class="line">	    Thread t2 = <span class="keyword">new</span> Thread(con);</span><br><span class="line">	    Thread t3 = <span class="keyword">new</span> Thread(pro);</span><br><span class="line">	    Thread t4 = <span class="keyword">new</span> Thread(con);</span><br><span class="line">	    t1.start();</span><br><span class="line">	    t2.start();</span><br><span class="line">	    t3.start();</span><br><span class="line">	    t4.start();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//资源类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Resouce</span></span>&#123;</span><br><span class="line">	<span class="comment">//定义一个资源空间</span></span><br><span class="line">	String[] str = <span class="keyword">new</span> String[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">	Object lock = <span class="keyword">new</span> Object();</span><br><span class="line">	<span class="comment">//存入数据</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">			<span class="comment">//如果有商品 应该让生产者等待</span></span><br><span class="line">			<span class="comment">/*</span></span><br><span class="line"><span class="comment">			 * 如果是if  加入商品不为null</span></span><br><span class="line"><span class="comment">			 *   生产者1  死在里面</span></span><br><span class="line"><span class="comment">			 *   消费者1取走商品</span></span><br><span class="line"><span class="comment">			 *   生产者2在来判断 发现商品为null  需要添加商品</span></span><br><span class="line"><span class="comment">			 *   唤醒所有线程 如果是if判断 生产者1直接执行wait后面代码</span></span><br><span class="line"><span class="comment">			 *   不会再判断 直接又加了一个商品  </span></span><br><span class="line"><span class="comment">			 *   我们应该使用while  让其在判断是否为空</span></span><br><span class="line"><span class="comment">			 * </span></span><br><span class="line"><span class="comment">			 * </span></span><br><span class="line"><span class="comment">			 * */</span></span><br><span class="line">			<span class="keyword">while</span>(str[<span class="number">0</span>]!=<span class="keyword">null</span>)&#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					lock.wait();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			str[<span class="number">0</span>] = name+count;<span class="comment">// t1</span></span><br><span class="line">			count++;</span><br><span class="line">			<span class="comment">//t1 str[0]</span></span><br><span class="line">			System.out.println(<span class="string">"这在存"</span>+<span class="string">"------"</span>+str[<span class="number">0</span>]);</span><br><span class="line">			<span class="comment">//唤醒消费者</span></span><br><span class="line">			<span class="comment">//lock.notify();</span></span><br><span class="line">			lock.notifyAll();<span class="comment">//影响效率 可以使用锁改进</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//取出数据</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">			<span class="keyword">while</span>(str[<span class="number">0</span>]==<span class="keyword">null</span>)&#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					lock.wait();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">"这在取"</span>+str[<span class="number">0</span>]);</span><br><span class="line">			str[<span class="number">0</span>] = <span class="keyword">null</span>;</span><br><span class="line">			<span class="comment">//t2  唤醒生产者</span></span><br><span class="line">			<span class="comment">//lock.notify();</span></span><br><span class="line">			lock.notifyAll();</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//生产者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Produce</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	Resouce r;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Produce</span><span class="params">(Resouce r)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.r = r;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">		r.put(<span class="string">"牛肉"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//消费者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Consume</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	Resouce r;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Consume</span><span class="params">(Resouce r)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.r = r;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">		r.get();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>为了提高效率我们采用了JDK中锁的升级</p>
-<p>Lock 实现提供了比使用 synchronized 方法和语句可获得的更广泛的锁定操作。此实现允许更灵活的结构，可以具有差别很大的属性，可以支持多个相关的 <a href="mk:@MSITStore:E:\api\JDK_API_1_6_zh_CN.CHM::/java/util/concurrent/locks/Condition.html">Condition</a> 对象。</p>
-<p>​    在JDK5之前，同步代码块上使用的锁是由开发人员自己指定的任意对象，而在JDK5中，专门提供Lock接口表示同步中的锁。</p>
-<p>​    JDK5中的Lock接口代替了同步和同步中的锁，将在JDK5之前的同步中隐式获取和释放锁的过程显示的指定到方法中，使用Lock接口中的lock方法可以手动的获取锁，使用unlock方法释放。</p>
-<p>例如</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *   Lock:可以主观的看见锁的获取以及释放</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadDemo</span> </span>&#123;</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * 生产者和消费者 操作同一个资源对象</span></span><br><span class="line"><span class="comment">   *   希望 多生产多消费</span></span><br><span class="line"><span class="comment">   *   </span></span><br><span class="line"><span class="comment">   *   创建锁对象  ReentrantLock  找lock接口子类</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   *   获取锁对象（在同步安全代码问题上）  lock()</span></span><br><span class="line"><span class="comment">   *   释放锁   unlock()</span></span><br><span class="line"><span class="comment">   *   </span></span><br><span class="line"><span class="comment">   *   Condition newCondition()：获取线程监视器对象 次对象有对线程</span></span><br><span class="line"><span class="comment">   *      进行等待以及唤醒的方法</span></span><br><span class="line"><span class="comment">   *      方法摘要 </span></span><br><span class="line"><span class="comment"> 			void await():让线程等待</span></span><br><span class="line"><span class="comment"> 			void signal() ：唤醒当个线程</span></span><br><span class="line"><span class="comment"> 			void signalAll():唤醒所有线程    </span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	    Resouce r = <span class="keyword">new</span> Resouce();</span><br><span class="line">	    Produce pro = <span class="keyword">new</span> Produce(r);</span><br><span class="line">	    Consume con = <span class="keyword">new</span> Consume(r);</span><br><span class="line">	    Thread t1 = <span class="keyword">new</span> Thread(pro);</span><br><span class="line">	    Thread t2 = <span class="keyword">new</span> Thread(con);</span><br><span class="line">	    Thread t3 = <span class="keyword">new</span> Thread(pro);</span><br><span class="line">	    Thread t4 = <span class="keyword">new</span> Thread(con);</span><br><span class="line">	    t1.start();</span><br><span class="line">	    t2.start();</span><br><span class="line">	    t3.start();</span><br><span class="line">	    t4.start();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//资源类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Resouce</span></span>&#123;</span><br><span class="line">	<span class="comment">//定义一个资源空间</span></span><br><span class="line">	String[] str = <span class="keyword">new</span> String[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//Object lock = new Object();</span></span><br><span class="line">	Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">	Condition con_pro = lock.newCondition();</span><br><span class="line">	Condition con_com = lock.newCondition();</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//存入数据</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">			<span class="comment">//如果有商品 应该让生产者等待</span></span><br><span class="line">			<span class="comment">/*</span></span><br><span class="line"><span class="comment">			 * 如果是if  加入商品不为null</span></span><br><span class="line"><span class="comment">			 *   生产者1  死在里面</span></span><br><span class="line"><span class="comment">			 *   消费者1取走商品</span></span><br><span class="line"><span class="comment">			 *   生产者2在来判断 发现商品为null  需要添加商品</span></span><br><span class="line"><span class="comment">			 *   唤醒所有线程 如果是if判断 生产者1直接执行wait后面代码</span></span><br><span class="line"><span class="comment">			 *   不会再判断 直接又加了一个商品  </span></span><br><span class="line"><span class="comment">			 *   我们应该使用while  让其在判断是否为空</span></span><br><span class="line"><span class="comment">			 * </span></span><br><span class="line"><span class="comment">			 * </span></span><br><span class="line"><span class="comment">			 * */</span></span><br><span class="line">		  lock.lock();</span><br><span class="line">			<span class="keyword">while</span>(str[<span class="number">0</span>]!=<span class="keyword">null</span>)&#123;</span><br><span class="line">				<span class="comment">/*try &#123;</span></span><br><span class="line"><span class="comment">					lock.wait();</span></span><br><span class="line"><span class="comment">				&#125; catch (InterruptedException e) &#123;</span></span><br><span class="line"><span class="comment">					// TODO Auto-generated catch block</span></span><br><span class="line"><span class="comment">					e.printStackTrace();</span></span><br><span class="line"><span class="comment">				&#125;*/</span></span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					con_pro.await();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">try</span>&#123;str[<span class="number">0</span>] = name+count;<span class="comment">// t1</span></span><br><span class="line">			count++;</span><br><span class="line">			<span class="comment">//t1 str[0]</span></span><br><span class="line">			System.out.println(<span class="string">"这在存"</span>+<span class="string">"------"</span>+str[<span class="number">0</span>]);</span><br><span class="line">			<span class="comment">//唤醒消费者</span></span><br><span class="line">			<span class="comment">//lock.notify();</span></span><br><span class="line">			con_com.signal();</span><br><span class="line">			&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">			lock.unlock();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//lock.notifyAll();//影响效率 可以使用锁改进</span></span><br><span class="line">		&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//取出数据</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="comment">/*synchronized (lock) &#123;*/</span></span><br><span class="line">		lock.lock();</span><br><span class="line">			<span class="keyword">while</span>(str[<span class="number">0</span>]==<span class="keyword">null</span>)&#123;</span><br><span class="line">				<span class="comment">/*try &#123;</span></span><br><span class="line"><span class="comment">					lock.wait();</span></span><br><span class="line"><span class="comment">				&#125; catch (InterruptedException e) &#123;</span></span><br><span class="line"><span class="comment">					// TODO Auto-generated catch block</span></span><br><span class="line"><span class="comment">					e.printStackTrace();</span></span><br><span class="line"><span class="comment">				&#125;*/</span></span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					con_com.await();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">try</span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"这在取"</span>+str[<span class="number">0</span>]);</span><br><span class="line">			str[<span class="number">0</span>] = <span class="keyword">null</span>;</span><br><span class="line">			<span class="comment">//t2  唤醒生产者</span></span><br><span class="line">			<span class="comment">//lock.notify();</span></span><br><span class="line">			<span class="comment">//lock.notifyAll();</span></span><br><span class="line">			con_pro.signal();</span><br><span class="line">			&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">			lock.unlock();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="comment">/*&#125;*/</span></span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//生产者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Produce</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	Resouce r;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Produce</span><span class="params">(Resouce r)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.r = r;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">		r.put(<span class="string">"牛肉"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//消费者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Consume</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	Resouce r;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Consume</span><span class="params">(Resouce r)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.r = r;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">		r.get();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="五：线程池"><a href="#五：线程池" class="headerlink" title="五：线程池"></a>五：线程池</h3><h4 id="5-1为什么要使用线程池"><a href="#5-1为什么要使用线程池" class="headerlink" title="5.1为什么要使用线程池"></a>5.1为什么要使用线程池</h4><p>我们使用线程的时候就去创建一个线程，这样实现起来非常简便，但是就会有一个问题：</p>
-<p>如果并发的线程数量很多，并且每个线程都是执行一个时间很短的任务就结束了，这样频繁创建线程就会大大降低 系统的效率，因为频繁创建线程和销毁线程需要时间。</p>
-<p>那么有没有一种办法使得线程可以复用，就是执行完一个任务，并不被销毁，而是可以继续执行其他的任务？</p>
-<p>在Java中可以通过线程池来达到这样的效果。</p>
-<h4 id="5-2什么是线程池"><a href="#5-2什么是线程池" class="headerlink" title="5.2什么是线程池"></a>5.2什么是线程池</h4><p>线程池概念 </p>
-<p>线程池：其实就是一个容纳多个线程的容器，其中的线程可以反复使用，省去了频繁创建线程对象的操作， 无需反复创建线程而消耗过多资源。</p>
-<p>合理利用线程池能够带来三个好处：</p>
+<p>数据结构是相同的</p>
+<p>String类型的使用场景：value除了是字符串还可以是数字</p>
 <ol>
-<li><p>降低资源消耗。减少了创建和销毁线程的次数，每个工作线程都可以被重复利用，可执行多个任务。 </p>
-</li>
-<li><p>提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。 </p>
-</li>
-<li><p>提高线程的可管理性。可以根据系统的承受能力，调整线程池中工作线线程的数目，防止因为消耗过多的内 存，而把服务器累趴下(每个线程需要大约1MB内存，线程开的越多，消耗的内存也就越大，最后死机)</p>
-</li>
+<li>计数器</li>
+<li>统计多单位的数量</li>
+<li>粉丝对象数</li>
+<li>对象缓存存储</li>
 </ol>
-<ol start="2">
-<li><p>2.3 线程池的使用 </p>
-</li>
-<li><p>Java里面线程池的顶级接口是 java.util.concurrent.Executor ，但是严格意义上讲 Executor 并不是一个线程 池，而只是一个执行线程的工具。真正的线程池接口是 java.util.concurrent.ExecutorService 。</p>
-</li>
-<li><p>要配置一个线程池是比较复杂的，尤其是对于线程池的原理不是很清楚的情况下，很有可能配置的线程池不是较优 的，因此在 java.util.concurrent.Executors 线程工厂类里面提供了一些静态工厂，生成一些常用的线程池。官 方建议使用Executors工程类来创建线程池对象。</p>
-</li>
-<li><p>Executors类中有个创建线程池的方法如下： public static ExecutorService newFixedThreadPool(int nThreads) ：返回线程池对象。(创建的是有界线 程池,也就是池中的线程个数可以指定最大数量)</p>
-</li>
-<li><p>获取到了一个线程池ExecutorService 对象，那么怎么使用呢，在这里定义了一个使用线程池对象的方法如下： public Future&lt;?&gt; submit(Runnable task) :获取线程池中的某一个线程对象，并执行 Future接口：用来记录线程任务执行完毕后产生的结果。线程池创建与使用。</p>
-</li>
-<li><p>使用线程池中线程对象的步骤：</p>
-</li>
-<li><p>创建线程池对象。 </p>
-</li>
-<li><p>创建Runnable接口子类对象。(task)</p>
-</li>
-<li><p>提交Runnable接口子类对象。(take task) </p>
-</li>
-<li><p>关闭线程池(一般不做)。</p>
-</li>
-</ol>
-<h4 id="5-3举例"><a href="#5-3举例" class="headerlink" title="5.3举例"></a>5.3举例</h4><ul>
-<li>Executors:工厂类 一般用来创建获取对象  可以使用他回去线程池接口</li>
-<li>static ExecutorService newFixedThreadPool(int nThreads) <pre><code>创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程。 </code></pre></li>
-<li></li>
-<li><T> Future<T><br>submit(Runnable task)<br>   提交一个 Runnable 任务用于执行，并返回一个表示该任务的 Future。<br>   传入一个线程对象 会调用线程对象run方法</T></T></li>
-</ul>
-<p>例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//ExecutorService  线程池接口</span></span><br><span class="line">		ExecutorService es = Executors.newFixedThreadPool(<span class="number">2</span>);<span class="comment">//线程池个数是两个</span></span><br><span class="line">		es.submit(<span class="keyword">new</span> MyThread());</span><br><span class="line">		es.submit(<span class="keyword">new</span> MyThread());</span><br><span class="line">		es.submit(<span class="keyword">new</span> MyThread());</span><br><span class="line">		<span class="comment">//void shutdown()   销毁线程池</span></span><br><span class="line">		es.shutdown();<span class="comment">//一般不会去销毁</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"您好"</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-blpop.html" target="_blank" rel="noopener">BLPOP key1 [key2 ] timeout</a>  移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-brpop.html" target="_blank" rel="noopener">BRPOP key1 [key2 ] timeout</a>  移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-brpoplpush.html" target="_blank" rel="noopener">BRPOPLPUSH source destination timeout</a>  从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它； 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lindex.html" target="_blank" rel="noopener">LINDEX key index</a>  通过索引获取列表中的元素</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-linsert.html" target="_blank" rel="noopener">LINSERT key BEFORE|AFTER pivot value</a>  在列表的元素前或者后插入元素</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-llen.html" target="_blank" rel="noopener">LLEN key</a>  获取列表长度</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lpop.html" target="_blank" rel="noopener">LPOP key</a>  移出并获取列表的第一个元素</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lpush.html" target="_blank" rel="noopener">LPUSH key value1 [value2]</a>  将一个或多个值插入到列表头部</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lpushx.html" target="_blank" rel="noopener">LPUSHX key value</a>  将一个值插入到已存在的列表头部</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lrange.html" target="_blank" rel="noopener">LRANGE key start stop</a>  获取列表指定范围内的元素</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lrem.html" target="_blank" rel="noopener">LREM key count value</a>  移除列表元素</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lset.html" target="_blank" rel="noopener">LSET key index value</a>  通过索引设置列表元素的值</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-ltrim.html" target="_blank" rel="noopener">LTRIM key start stop</a>  对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpop.html" target="_blank" rel="noopener">RPOP key</a>  移除列表的最后一个元素，返回值为移除的元素。</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpoplpush.html" target="_blank" rel="noopener">RPOPLPUSH source destination</a>  移除列表的最后一个元素，并将该元素添加到另一个列表并返回</td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpush.html" target="_blank" rel="noopener">RPUSH key value1 [value2]</a>  在列表中添加一个或多个值</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpushx.html" target="_blank" rel="noopener">RPUSHX key value</a>  为已存在的列表添加值</td>
+</tr>
+</tbody></table>
+<p>基本的数据类型，列表</p>
+<p>在Redis里，可以把list搞成栈，队列，阻塞队列</p>
+<p>所有list的命令，都以L开头</p>
+<p>List</p>
+<p>(头部)  A=&gt;B=&gt;C=&gt;D(尾部部)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush list one  //讲一个值或者多个值添加到列表头部</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; lpush list two</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; lpush list three</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1  //获取所有的list中的值</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 1 //通过区间获取具体的值</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; Rpush list right //讲一个或者多个值，插入到列表尾部（右）</span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">4) <span class="string">"right"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">LPOP  //移除list的第一个元素</span><br><span class="line">RPOP  //移除list的最后一个元素</span><br><span class="line">127.0.0.1:6379&gt; Lpop list</span><br><span class="line"><span class="string">"three"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1</span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"one"</span></span><br><span class="line">3) <span class="string">"right"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">Lindex <span class="comment"># 通过角标获取list中的元素</span></span><br><span class="line">127.0.0.1:6379&gt; lindex list 0</span><br><span class="line"><span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">Llen  <span class="comment">#获得list的长度</span></span><br><span class="line">127.0.0.1:6379&gt; Llen list</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">移除指定的值</span><br><span class="line">Lrem</span><br><span class="line">127.0.0.1:6379&gt; lrem list 1 one  //移除list中一个one元素</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1 </span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"right"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">trim 修剪：list截断</span><br><span class="line">127.0.0.1:6379&gt; lpush mylist hello1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello2</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello3</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hello2"</span></span><br><span class="line">3) <span class="string">"hello3"</span></span><br><span class="line">127.0.0.1:6379&gt; LTRIM mylist 0 1</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hello2"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">rpoplpush //移除列表最后一个元素，将他移动到新的列表中</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; lpush mylist hello1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello2</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello3</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; rpoplpush mylist otherlist//移除列表最后一个元素，将他移动到新的列表中</span><br><span class="line"><span class="string">"hello3"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0-1</span><br><span class="line">(error) ERR wrong number of arguments <span class="keyword">for</span> <span class="string">'lrange'</span> <span class="built_in">command</span></span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hello2"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange otherlist 0 -1</span><br><span class="line">1) <span class="string">"hello3"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">lset <span class="comment">#将list指定下标替换为另一个值</span></span><br><span class="line"></span><br><span class="line">linsert <span class="comment">#往指定列表里面元素前面或者后面添加</span></span><br><span class="line">127.0.0.1:6379&gt; LINSERT mylist after hello1 hahaha</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hahaha"</span></span><br><span class="line">3) <span class="string">"hello2"</span></span><br></pre></td></tr></table></figure>
 
+<p>小结：</p>
+<ul>
+<li>实际上是一个链表，before node after  left right都可以插入</li>
+<li>如果key不存在，创建新的链表</li>
+<li>如果key存在，新增内容</li>
+<li>如果移动了所有值，空链表也代表不存在</li>
+<li>在两边插入或者改动值，效率最高！ 中间元素相对效率会低一点</li>
+</ul>
+<p>可以用作消息排队！消息队列（Lpush Rpop）,栈（Lpush Lpop  ）</p>
+<h2 id="Set（集合）"><a href="#Set（集合）" class="headerlink" title="Set（集合）"></a>Set（集合）</h2><p>Set中的值是不能重复的</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sadd.html" target="_blank" rel="noopener">SADD key member1 [member2]</a>  向集合添加一个或多个成员</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-scard.html" target="_blank" rel="noopener">SCARD key</a>  获取集合的成员数</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sdiff.html" target="_blank" rel="noopener">SDIFF key1 [key2]</a>  返回第一个集合与其他集合之间的差异。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sdiffstore.html" target="_blank" rel="noopener">SDIFFSTORE destination key1 [key2]</a>  返回给定所有集合的差集并存储在 destination 中</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sinter.html" target="_blank" rel="noopener">SINTER key1 [key2]</a>  返回给定所有集合的交集</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sinterstore.html" target="_blank" rel="noopener">SINTERSTORE destination key1 [key2]</a>  返回给定所有集合的交集并存储在 destination 中</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sismember.html" target="_blank" rel="noopener">SISMEMBER key member</a>  判断 member 元素是否是集合 key 的成员</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-smembers.html" target="_blank" rel="noopener">SMEMBERS key</a>  返回集合中的所有成员</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-smove.html" target="_blank" rel="noopener">SMOVE source destination member</a>  将 member 元素从 source 集合移动到 destination 集合</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-spop.html" target="_blank" rel="noopener">SPOP key</a>  移除并返回集合中的一个随机元素</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-srandmember.html" target="_blank" rel="noopener">SRANDMEMBER key [count]</a>  返回集合中一个或多个随机数</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-srem.html" target="_blank" rel="noopener">SREM key member1 [member2]</a>  移除集合中一个或多个成员</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sunion.html" target="_blank" rel="noopener">SUNION key1 [key2]</a>  返回所有给定集合的并集</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sunionstore.html" target="_blank" rel="noopener">SUNIONSTORE destination key1 [key2]</a>  所有给定集合的并集存储在 destination 集合中</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sscan.html" target="_blank" rel="noopener">SSCAN key cursor [MATCH pattern] [COUNT count]</a>  迭代集合中的元素</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; sadd myset aaa   </span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd myset bbb</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset  //查看<span class="built_in">set</span>里面的数</span><br><span class="line">1) <span class="string">"bbb"</span></span><br><span class="line">2) <span class="string">"aaa"</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; SISMEMBER myset xxx  /判断xxx是否在<span class="built_in">set</span>里面</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; scard myset //查看<span class="built_in">set</span>里面内容元素个数</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; srem myset aaa   <span class="comment">#移除set中的指定元素</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"bbb"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"> <span class="built_in">set</span> 无序不重复集合。可以抽随机</span><br><span class="line"> 127.0.0.1:6379&gt; sadd myset 111</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd myset 222</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd myset 333</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER myset 1</span><br><span class="line"><span class="string">"222"</span></span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER myset  1<span class="comment">#随机抽取出指定个数的元素</span></span><br><span class="line"><span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">删除指定<span class="built_in">set</span>中，随机的一个值</span><br><span class="line">127.0.0.1:6379&gt; spop myset</span><br><span class="line"><span class="string">"222"</span></span><br><span class="line">127.0.0.1:6379&gt; spop myset</span><br><span class="line"><span class="string">"111"</span></span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">将一个指定的值，移动到另一个<span class="built_in">set</span>中</span><br><span class="line">127.0.0.1:6379&gt; sadd myset hello</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set1 word</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set1</span><br><span class="line">1) <span class="string">"word"</span></span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"hello"</span></span><br><span class="line">2) <span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; smove myset set1 hello</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set1</span><br><span class="line">1) <span class="string">"word"</span></span><br><span class="line">2) <span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">社交网站的共同好友</span><br><span class="line">- 差集</span><br><span class="line">- 并集</span><br><span class="line">- 交集</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; sadd set1 a</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set1 b</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set1 c</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set2 c</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set2 d</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set2 e</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SDIFF set1 set2 <span class="comment">#查看set1和set2的差集</span></span><br><span class="line">1) <span class="string">"a"</span></span><br><span class="line">2) <span class="string">"b"</span></span><br><span class="line">127.0.0.1:6379&gt; SINTER set1 set2<span class="comment">#查看set1和set2的交集</span></span><br><span class="line">1) <span class="string">"c"</span></span><br><span class="line">127.0.0.1:6379&gt; SUNION set1 set2<span class="comment">#查看set1和set2的并集</span></span><br><span class="line">1) <span class="string">"c"</span></span><br><span class="line">2) <span class="string">"a"</span></span><br><span class="line">3) <span class="string">"b"</span></span><br><span class="line">4) <span class="string">"d"</span></span><br><span class="line">5) <span class="string">"e"</span></span><br></pre></td></tr></table></figure>
+
+<p>应用场景</p>
+<ul>
+<li>A用户将所有的关注的人放在set中！可以做共同关注，</li>
+<li>共同爱好，二度理论</li>
+</ul>
+<h2 id="hash（哈希）"><a href="#hash（哈希）" class="headerlink" title="hash（哈希）"></a>hash（哈希）</h2><p>Map集合  key-MAP<KEY-VALUE>本质上和String类型没有太大区别</KEY-VALUE></p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hdel.html" target="_blank" rel="noopener">HDEL key field1 [field2]</a>  删除一个或多个哈希表字段</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hexists.html" target="_blank" rel="noopener">HEXISTS key field</a>  查看哈希表 key 中，指定的字段是否存在。</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hget.html" target="_blank" rel="noopener">HGET key field</a>  获取存储在哈希表中指定字段的值。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hgetall.html" target="_blank" rel="noopener">HGETALL key</a>  获取在哈希表中指定 key 的所有字段和值</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hincrby.html" target="_blank" rel="noopener">HINCRBY key field increment</a>  为哈希表 key 中的指定字段的整数值加上增量 increment 。</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hincrbyfloat.html" target="_blank" rel="noopener">HINCRBYFLOAT key field increment</a>  为哈希表 key 中的指定字段的浮点数值加上增量 increment 。</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hkeys.html" target="_blank" rel="noopener">HKEYS key</a>  获取所有哈希表中的字段</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hlen.html" target="_blank" rel="noopener">HLEN key</a>  获取哈希表中字段的数量</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hmget.html" target="_blank" rel="noopener">HMGET key field1 [field2]</a>  获取所有给定字段的值</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hmset.html" target="_blank" rel="noopener">HMSET key field1 value1 [field2 value2 ]</a>  同时将多个 field-value (域-值)对设置到哈希表 key 中。</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hset.html" target="_blank" rel="noopener">HSET key field value</a>  将哈希表 key 中的字段 field 的值设为 value 。</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hsetnx.html" target="_blank" rel="noopener">HSETNX key field value</a>  只有在字段 field 不存在时，设置哈希表字段的值。</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hvals.html" target="_blank" rel="noopener">HVALS key</a>  获取哈希表中所有值。</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hscan.html" target="_blank" rel="noopener">HSCAN key cursor [MATCH pattern] [COUNT count]</a>  迭代哈希表中的键值对。</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset myhash f1 v1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hset myhash f2 v2 </span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hget myhash f1</span><br><span class="line"><span class="string">"v1"</span></span><br><span class="line">127.0.0.1:6379&gt; hmset myhash f3 v3 f4 v4</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; hmget myhash f1 f2 f3 f4</span><br><span class="line">1) <span class="string">"v1"</span></span><br><span class="line">2) <span class="string">"v2"</span></span><br><span class="line">3) <span class="string">"v3"</span></span><br><span class="line">4) <span class="string">"v4"</span></span><br><span class="line">127.0.0.1:6379&gt; HGETALL myhash</span><br><span class="line">1) <span class="string">"f1"</span></span><br><span class="line">2) <span class="string">"v1"</span></span><br><span class="line">3) <span class="string">"f2"</span></span><br><span class="line">4) <span class="string">"v2"</span></span><br><span class="line">5) <span class="string">"f3"</span></span><br><span class="line">6) <span class="string">"v3"</span></span><br><span class="line">7) <span class="string">"f4"</span></span><br><span class="line">8) <span class="string">"v4"</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; HDEL myhash f1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; HGETALL myhash</span><br><span class="line">1) <span class="string">"f2"</span></span><br><span class="line">2) <span class="string">"v2"</span></span><br><span class="line">3) <span class="string">"f3"</span></span><br><span class="line">4) <span class="string">"v3"</span></span><br><span class="line">5) <span class="string">"f4"</span></span><br><span class="line">6) <span class="string">"v4"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; hlen myhash <span class="comment"># 获取hash  长度</span></span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; HEXISTS myhash f1  <span class="comment">#判断指定key是否在hash存在</span></span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; HEXISTS myhash f2</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#只获得所有的key</span></span><br><span class="line"><span class="comment">#只获获得所有的value</span></span><br><span class="line">127.0.0.1:6379&gt; hkeys myhash<span class="comment">#只获得所有的key</span></span><br><span class="line">1) <span class="string">"f2"</span></span><br><span class="line">2) <span class="string">"f3"</span></span><br><span class="line">3) <span class="string">"f4"</span></span><br><span class="line">127.0.0.1:6379&gt; HVALS myhash <span class="comment">#只获获得所有的value</span></span><br><span class="line">1) <span class="string">"v2"</span></span><br><span class="line">2) <span class="string">"v3"</span></span><br><span class="line">3) <span class="string">"v4"</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">incr  decr</span><br><span class="line">127.0.0.1:6379&gt; hset myhash f5 5</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; HINCRBY myhash f5 1  <span class="comment">#自增</span></span><br><span class="line">(<span class="built_in">integer</span>) 6</span><br><span class="line">127.0.0.1:6379&gt; hsetnx myhash f5 2  <span class="comment">#如果f5不存在就设置为2否则失败</span></span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; hsetnx myhash f6  3</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+
+<p>hash应用场景</p>
+<p>hash变更数据，user name age </p>
+<p>尤其是用户信息之类，经常变动的信息</p>
+<p>hash更适合对象的存储</p>
+<p>String适合字符串存储</p>
+<h2 id="Zset-有序集合"><a href="#Zset-有序集合" class="headerlink" title="Zset(有序集合)"></a>Zset(有序集合)</h2><p>在set的基础上，增加了一个值zset k1 score1  v1</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zadd.html" target="_blank" rel="noopener">ZADD key score1 member1 [score2 member2]</a>  向有序集合添加一个或多个成员，或者更新已存在成员的分数</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zcard.html" target="_blank" rel="noopener">ZCARD key</a>  获取有序集合的成员数</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zcount.html" target="_blank" rel="noopener">ZCOUNT key min max</a>  计算在有序集合中指定区间分数的成员数</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zincrby.html" target="_blank" rel="noopener">ZINCRBY key increment member</a>  有序集合中对指定成员的分数加上增量 increment</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zinterstore.html" target="_blank" rel="noopener">ZINTERSTORE destination numkeys key [key …]</a>  计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 destination 中</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zlexcount.html" target="_blank" rel="noopener">ZLEXCOUNT key min max</a>  在有序集合中计算指定字典区间内成员数量</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrange.html" target="_blank" rel="noopener">ZRANGE key start stop [WITHSCORES]</a>  通过索引区间返回有序集合指定区间内的成员</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrangebylex.html" target="_blank" rel="noopener">ZRANGEBYLEX key min max [LIMIT offset count]</a>  通过字典区间返回有序集合的成员</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrangebyscore.html" target="_blank" rel="noopener">ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]</a>  通过分数返回有序集合指定区间内的成员</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrank.html" target="_blank" rel="noopener">ZRANK key member</a>  返回有序集合中指定成员的索引</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrem.html" target="_blank" rel="noopener">ZREM key member [member …]</a>  移除有序集合中的一个或多个成员</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zremrangebylex.html" target="_blank" rel="noopener">ZREMRANGEBYLEX key min max</a>  移除有序集合中给定的字典区间的所有成员</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zremrangebyrank.html" target="_blank" rel="noopener">ZREMRANGEBYRANK key start stop</a>  移除有序集合中给定的排名区间的所有成员</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zremrangebyscore.html" target="_blank" rel="noopener">ZREMRANGEBYSCORE key min max</a>  移除有序集合中给定的分数区间的所有成员</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrevrange.html" target="_blank" rel="noopener">ZREVRANGE key start stop [WITHSCORES]</a>  返回有序集中指定区间内的成员，通过索引，分数从高到低</td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrevrangebyscore.html" target="_blank" rel="noopener">ZREVRANGEBYSCORE key max min [WITHSCORES]</a>  返回有序集中指定分数区间内的成员，分数从高到低排序</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrevrank.html" target="_blank" rel="noopener">ZREVRANK key member</a>  返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序</td>
+</tr>
+<tr>
+<td align="left">18</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zscore.html" target="_blank" rel="noopener">ZSCORE key member</a>  返回有序集中，成员的分数值</td>
+</tr>
+<tr>
+<td align="left">19</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zunionstore.html" target="_blank" rel="noopener">ZUNIONSTORE destination numkeys key [key …]</a>  计算给定的一个或多个有序集的并集，并存储在新的 key 中</td>
+</tr>
+<tr>
+<td align="left">20</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zscan.html" target="_blank" rel="noopener">ZSCAN key cursor [MATCH pattern] [COUNT count]</a>  迭代有序集合中的元素（包括元素成员和元素分值）</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd myset 1 one</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd myset 2 two</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd myset 3 three</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; zadd sal 2000 xiaobai   <span class="comment">#添加用户薪水</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd sal 8000 wu</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd sal 300 zhangsan</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; ZRANGEBYSCORE sal -inf +inf  <span class="comment">#从小到大排序</span></span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"xiaobai"</span></span><br><span class="line">3) <span class="string">"wu"</span></span><br><span class="line">127.0.0.1:6379&gt; ZRANGEBYSCORE sal -inf +inf withscores <span class="comment">#带上分值</span></span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"300"</span></span><br><span class="line">3) <span class="string">"xiaobai"</span></span><br><span class="line">4) <span class="string">"2000"</span></span><br><span class="line">5) <span class="string">"wu"</span></span><br><span class="line">6) <span class="string">"8000"</span></span><br><span class="line">127.0.0.1:6379&gt; ZRANGEBYSCORE sal -inf 2500 withscores <span class="comment">#显示薪水小于2500的</span></span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"300"</span></span><br><span class="line">3) <span class="string">"xiaobai"</span></span><br><span class="line">4) <span class="string">"2000"</span></span><br><span class="line">127.0.0.1:6379&gt; ZREVRANGE sal 0 -1  <span class="comment">#降序排列</span></span><br><span class="line">1) <span class="string">"wu"</span></span><br><span class="line">2) <span class="string">"zhangsan"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; zrange sal 0 -1  </span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"xiaobai"</span></span><br><span class="line">3) <span class="string">"wu"</span></span><br><span class="line">127.0.0.1:6379&gt; zrem sal xiaobai  <span class="comment">#移除集合指定元素</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zrange sal 0 -1</span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"wu"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; zcard sal  <span class="comment">#获取有序集合元素的个数</span></span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; zadd sal 3220 xixi</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zcount sal 5000 10000   <span class="comment">#获取指定区间内的元素</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+
+<p>使用场景：</p>
+<ul>
+<li>set排序，储存班级成绩</li>
+<li>消息排序，带权重。排行榜。</li>
+</ul>
 
       
 
@@ -453,7 +782,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">java多线程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
         		</li>
       		
 		</ul>
@@ -509,7 +838,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/01/31/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/07/24/Redis/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -523,18 +852,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/02/01/%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%87%92%E6%B1%89%E5%BC%8F%E5%92%8C%E9%A5%BF%E6%B1%89%E5%BC%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/07/26/Redis%E4%BA%8B%E5%8A%A1/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          单例设计模式懒汉式和饿汉式
+          Redis事务
         
       </div>
     </a>
   
   
-    <a href="/2020/01/27/java%E9%9B%86%E5%90%88%E6%B5%85%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">java集合浅解</div>
+    <a href="/2020/07/10/swagger/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">swagger</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -561,7 +890,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一：多线程的有关概念"><span class="toc-number">1.</span> <span class="toc-text">一：多线程的有关概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1：概念"><span class="toc-number">1.0.1.</span> <span class="toc-text">1：概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2：线程的生命周期"><span class="toc-number">1.0.2.</span> <span class="toc-text">2：线程的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-新建"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">1.新建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-就绪"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">2.就绪</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-运行"><span class="toc-number">1.0.2.3.</span> <span class="toc-text">3.运行</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-阻塞"><span class="toc-number">1.0.2.4.</span> <span class="toc-text">4.阻塞</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-死亡"><span class="toc-number">1.0.2.5.</span> <span class="toc-text">5.死亡</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二：线程的实现"><span class="toc-number">2.</span> <span class="toc-text">二：线程的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1：构造方法"><span class="toc-number">2.1.</span> <span class="toc-text">1：构造方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2：创建一个线程的步骤"><span class="toc-number">2.2.</span> <span class="toc-text">2：创建一个线程的步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3：实现线程二-实现Runnable接口"><span class="toc-number">2.3.</span> <span class="toc-text">3：实现线程二:实现Runnable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-run和start的区别"><span class="toc-number">2.4.</span> <span class="toc-text">4:run和start的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三：多线程安全问题"><span class="toc-number">3.</span> <span class="toc-text">三：多线程安全问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1：问题分析"><span class="toc-number">3.0.1.</span> <span class="toc-text">1：问题分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2：synchronize使用注意事项"><span class="toc-number">3.0.2.</span> <span class="toc-text">2：synchronize使用注意事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3：synchronize锁对象"><span class="toc-number">3.0.3.</span> <span class="toc-text">3：synchronize锁对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4：死锁问题"><span class="toc-number">3.0.4.</span> <span class="toc-text">4：死锁问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-1死锁分析"><span class="toc-number">3.0.4.1.</span> <span class="toc-text">4.1死锁分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-2死锁个人见解"><span class="toc-number">3.0.4.2.</span> <span class="toc-text">4.2死锁个人见解</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-3死锁形成的原因"><span class="toc-number">3.0.4.3.</span> <span class="toc-text">4.3死锁形成的原因</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-4死锁的处理"><span class="toc-number">3.0.4.4.</span> <span class="toc-text">4.4死锁的处理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-死锁预防"><span class="toc-number">3.0.4.5.</span> <span class="toc-text">5.死锁预防</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#5-1-破坏“互斥”条件"><span class="toc-number">3.0.4.5.1.</span> <span class="toc-text">5.1 破坏“互斥”条件</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-2-破坏“占有并等待”条件"><span class="toc-number">3.0.4.6.</span> <span class="toc-text">5.2 破坏“占有并等待”条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-3-破坏“不可抢占”条件"><span class="toc-number">3.0.4.7.</span> <span class="toc-text">5.3 破坏“不可抢占”条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-4-破坏“循环等待”条件"><span class="toc-number">3.0.4.8.</span> <span class="toc-text">5.4 破坏“循环等待”条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-死锁避免"><span class="toc-number">3.0.4.9.</span> <span class="toc-text">6.死锁避免</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-1-有序资源分配法"><span class="toc-number">3.0.4.10.</span> <span class="toc-text">6.1 有序资源分配法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-顺序加锁"><span class="toc-number">3.0.4.11.</span> <span class="toc-text">6.2 顺序加锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-3-限时加锁"><span class="toc-number">3.0.4.12.</span> <span class="toc-text">6.3 限时加锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-4-死锁检测"><span class="toc-number">3.0.4.13.</span> <span class="toc-text">6.4 死锁检测</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-5死锁恢复"><span class="toc-number">3.0.4.14.</span> <span class="toc-text">6.5死锁恢复</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四：生产者和消费者"><span class="toc-number">3.1.</span> <span class="toc-text">四：生产者和消费者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五：线程池"><span class="toc-number">3.2.</span> <span class="toc-text">五：线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1为什么要使用线程池"><span class="toc-number">3.2.1.</span> <span class="toc-text">5.1为什么要使用线程池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2什么是线程池"><span class="toc-number">3.2.2.</span> <span class="toc-text">5.2什么是线程池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3举例"><span class="toc-number">3.2.3.</span> <span class="toc-text">5.3举例</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis是什么？"><span class="toc-number">1.</span> <span class="toc-text">Redis是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis可以干嘛"><span class="toc-number">2.</span> <span class="toc-text">Redis可以干嘛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis常用指令"><span class="toc-number">3.</span> <span class="toc-text">Redis常用指令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis测试工具"><span class="toc-number">3.1.</span> <span class="toc-text">Redis测试工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis常用指令-1"><span class="toc-number">3.2.</span> <span class="toc-text">Redis常用指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-keys-命令"><span class="toc-number">3.3.</span> <span class="toc-text">Redis keys 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-字符串命令"><span class="toc-number">3.4.</span> <span class="toc-text">Redis 字符串命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List"><span class="toc-number">3.5.</span> <span class="toc-text">List</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Set（集合）"><span class="toc-number">3.6.</span> <span class="toc-text">Set（集合）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hash（哈希）"><span class="toc-number">3.7.</span> <span class="toc-text">hash（哈希）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zset-有序集合"><span class="toc-number">3.8.</span> <span class="toc-text">Zset(有序集合)</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -595,7 +924,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="java多线程" data-title="java多线程" data-url="http://yoursite.com/2020/01/31/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/"></div>
+	<div class="ds-thread" data-thread-key="Redis" data-title="Redis学习笔记" data-url="http://yoursite.com/2020/07/24/Redis/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -618,8 +947,8 @@
   <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
 <script>
   var cloudTieConfig = {
-    url: "http://yoursite.com/2020/01/31/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/", 
-    sourceId: "java多线程",
+    url: "http://yoursite.com/2020/07/24/Redis/", 
+    sourceId: "Redis",
     productKey: "true",
     target: "cloud-tie-wrapper"
   };
@@ -628,7 +957,7 @@
   
 
   
-  <div id="SOHUCS" sid="java多线程" ></div> 
+  <div id="SOHUCS" sid="Redis" ></div> 
 <script charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
     window.changyan.api.config({

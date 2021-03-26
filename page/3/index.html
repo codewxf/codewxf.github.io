@@ -150,6 +150,552 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MySQL笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/05/MySQL%E7%AC%94%E8%AE%B0/">MySQL笔记</a>
+    </h1>
+  
+
+        
+        
+        <a href="/2020/02/05/MySQL%E7%AC%94%E8%AE%B0/" class="archive-article-date">
+  	<time datetime="2020-02-05T07:43:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-05</time>
+</a>
+        
+      </header>
+    
+    <div align="center" class="post-count">
+    字数：2k字 | 预计阅读时长：8分钟
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><pre><code>1. 数据库的英文单词： DataBase 简称 ： DB
+2. 什么数据库？
+    * 用于存储和管理数据的仓库。
+
+3. 数据库的特点：
+    1. 持久化存储数据的。其实数据库就是一个文件系统
+    2. 方便存储和管理数据
+    3. 使用了统一的方式操作数据库 -- SQL</code></pre><p>​    </p>
+<pre><code>4. 常见的数据库软件
+    * 参见《MySQL基础.pdf》</code></pre><h1 id="MySQL数据库软件"><a href="#MySQL数据库软件" class="headerlink" title="MySQL数据库软件"></a>MySQL数据库软件</h1><pre><code>1. 安装
+    * 参见《MySQL基础.pdf》
+2. 卸载
+    1. 去mysql的安装目录找到my.ini文件
+        * 复制 datadir=&quot;C:/ProgramData/MySQL/MySQL Server 5.5/Data/&quot;
+    2. 卸载MySQL
+    3. 删除C:/ProgramData目录下的MySQL文件夹。
+
+3. 配置
+    * MySQL服务启动
+        1. 手动。
+        2. cmd--&gt; services.msc 打开服务的窗口
+        3. 使用管理员打开cmd
+            * net start mysql : 启动mysql的服务
+            * net stop mysql:关闭mysql服务
+    * MySQL登录
+        1. mysql -uroot -p密码
+        2. mysql -hip -uroot -p连接目标的密码
+        3. mysql --host=ip --user=root --password=连接目标的密码
+    * MySQL退出
+        1. exit
+        2. quit
+
+    * MySQL目录结构
+        1. MySQL安装目录：basedir=&quot;D:/develop/MySQL/&quot;
+            * 配置文件 my.ini
+        2. MySQL数据目录：datadir=&quot;C:/ProgramData/MySQL/MySQL Server 5.5/Data/&quot;
+            * 几个概念
+                * 数据库：文件夹
+                * 表：文件
+                * 数据：数据</code></pre><h1 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h1><pre><code>1.什么是SQL？
+    Structured Query Language：结构化查询语言
+    其实就是定义了操作所有关系型数据库的规则。每一种数据库操作的方式存在不一样的地方，称为“方言”。
+
+2.SQL通用语法
+    1. SQL 语句可以单行或多行书写，以分号结尾。
+    2. 可使用空格和缩进来增强语句的可读性。
+    3. MySQL 数据库的 SQL 语句不区分大小写，关键字建议使用大写。
+    4. 3 种注释
+        * 单行注释: -- 注释内容 或 # 注释内容(mysql 特有) 
+        * 多行注释: /* 注释 */
+
+3. SQL分类
+    1) DDL(Data Definition Language)数据定义语言
+        用来定义数据库对象：数据库，表，列等。关键字：create, drop,alter 等
+    2) DML(Data Manipulation Language)数据操作语言
+        用来对数据库中表的数据进行增删改。关键字：insert, delete, update 等
+    3) DQL(Data Query Language)数据查询语言
+        用来查询数据库中表的记录(数据)。关键字：select, where 等
+    4) DCL(Data Control Language)数据控制语言(了解)
+        用来定义数据库的访问权限和安全级别，及创建用户。关键字：GRANT， REVOKE 等</code></pre><h2 id="DDL-操作数据库、表"><a href="#DDL-操作数据库、表" class="headerlink" title="DDL:操作数据库、表"></a>DDL:操作数据库、表</h2><pre><code>1. 操作数据库：CRUD
+    1. C(Create):创建
+        * 创建数据库：
+            * create database 数据库名称;
+        * 创建数据库，判断不存在，再创建：
+            * create database if not exists 数据库名称;
+        * 创建数据库，并指定字符集
+            * create database 数据库名称 character set 字符集名;
+
+        * 练习： 创建db4数据库，判断是否存在，并制定字符集为gbk
+            * create database if not exists db4 character set gbk;
+    2. R(Retrieve)：查询
+        * 查询所有数据库的名称:
+            * show databases;
+        * 查询某个数据库的字符集:查询某个数据库的创建语句
+            * show create database 数据库名称;
+    3. U(Update):修改
+        * 修改数据库的字符集
+            * alter database 数据库名称 character set 字符集名称;
+    4. D(Delete):删除
+        * 删除数据库
+            * drop database 数据库名称;
+        * 判断数据库存在，存在再删除
+            * drop database if exists 数据库名称;
+    5. 使用数据库
+        * 查询当前正在使用的数据库名称
+            * select database();
+        * 使用数据库
+            * use 数据库名称;
+
+
+2. 操作表
+    1. C(Create):创建
+        1. 语法：
+            create table 表名(
+                列名1 数据类型1,
+                列名2 数据类型2,
+                ....
+                列名n 数据类型n
+            );
+            * 注意：最后一列，不需要加逗号（,）
+            * 数据库类型：
+                1. int：整数类型
+                    * age int,
+                2. double:小数类型
+                    * score double(5,2)
+                3. date:日期，只包含年月日，yyyy-MM-dd
+                4. datetime:日期，包含年月日时分秒     yyyy-MM-dd HH:mm:ss
+                5. timestamp:时间错类型    包含年月日时分秒     yyyy-MM-dd HH:mm:ss    
+                    * 如果将来不给这个字段赋值，或赋值为null，则默认使用当前的系统时间，来自动赋值
+
+                6. varchar：字符串
+                    * name varchar(20):姓名最大20个字符
+                    * zhangsan 8个字符  张三 2个字符
+
+
+        * 创建表
+            create table student(
+                id int,
+                name varchar(32),
+                age int ,
+                score double(4,1),
+                birthday date,
+                insert_time timestamp
+            );
+        * 复制表：
+            * create table 表名 like 被复制的表名;          
+    2. R(Retrieve)：查询
+        * 查询某个数据库中所有的表名称
+            * show tables;
+        * 查询表结构
+            * desc 表名;
+    3. U(Update):修改
+        1. 修改表名
+            alter table 表名 rename to 新的表名;
+        2. 修改表的字符集
+            alter table 表名 character set 字符集名称;
+        3. 添加一列
+            alter table 表名 add 列名 数据类型;
+        4. 修改列名称 类型
+            alter table 表名 change 列名 新列别 新数据类型;
+            alter table 表名 modify 列名 新数据类型;
+        5. 删除列
+            alter table 表名 drop 列名;
+    4. D(Delete):删除
+        * drop table 表名;
+        * drop table  if exists 表名 ;</code></pre><ul>
+<li>客户端图形化工具：SQLYog</li>
+</ul>
+<h2 id="DML：增删改表中数据"><a href="#DML：增删改表中数据" class="headerlink" title="DML：增删改表中数据"></a>DML：增删改表中数据</h2><pre><code>1. 添加数据：
+    * 语法：
+        * insert into 表名(列名1,列名2,...列名n) values(值1,值2,...值n);
+    * 注意：
+        1. 列名和值要一一对应。
+        2. 如果表名后，不定义列名，则默认给所有列添加值
+            insert into 表名 values(值1,值2,...值n);
+        3. 除了数字类型，其他类型需要使用引号(单双都可以)引起来
+2. 删除数据：
+    * 语法：
+        * delete from 表名 [where 条件]
+    * 注意：
+        1. 如果不加条件，则删除表中所有记录。
+        2. 如果要删除所有记录
+            1. delete from 表名; -- 不推荐使用。有多少条记录就会执行多少次删除操作
+            2. TRUNCATE TABLE 表名; -- 推荐使用，效率更高 先删除表，然后再创建一张一样的表。
+3. 修改数据：
+    * 语法：
+        * update 表名 set 列名1 = 值1, 列名2 = 值2,... [where 条件];
+
+    * 注意：
+        1. 如果不加任何条件，则会将表中所有记录全部修改。</code></pre><h2 id="DQL：查询表中的记录"><a href="#DQL：查询表中的记录" class="headerlink" title="DQL：查询表中的记录"></a>DQL：查询表中的记录</h2><pre><code>* select * from 表名;
+
+1. 语法：
+    select
+        字段列表
+    from
+        表名列表
+    where
+        条件列表
+    group by
+        分组字段
+    having
+        分组之后的条件
+    order by
+        排序
+    limit
+        分页限定
+
+
+2. 基础查询
+    1. 多个字段的查询
+        select 字段名1，字段名2... from 表名；
+        * 注意：
+            * 如果查询所有字段，则可以使用*来替代字段列表。
+    2. 去除重复：
+        * distinct
+    3. 计算列
+        * 一般可以使用四则运算计算一些列的值。（一般只会进行数值型的计算）
+        * ifnull(表达式1,表达式2)：null参与的运算，计算结果都为null
+            * 表达式1：哪个字段需要判断是否为null
+            * 如果该字段为null后的替换值。
+    4. 起别名：
+        * as：as也可以省略
+
+
+3. 条件查询
+    1. where子句后跟条件
+    2. 运算符
+        * &gt; 、&lt; 、&lt;= 、&gt;= 、= 、&lt;&gt;
+        * BETWEEN...AND  
+        * IN( 集合) 
+        * LIKE：模糊查询
+            * 占位符：
+                * _:单个任意字符
+                * %：多个任意字符
+        * IS NULL  
+        * and  或 &amp;&amp;
+        * or  或 || 
+        * not  或 !
+
+            -- 查询年龄大于20岁
+
+            SELECT * FROM student WHERE age &gt; 20;
+
+            SELECT * FROM student WHERE age &gt;= 20;
+
+            -- 查询年龄等于20岁
+            SELECT * FROM student WHERE age = 20;
+
+            -- 查询年龄不等于20岁
+            SELECT * FROM student WHERE age != 20;
+            SELECT * FROM student WHERE age &lt;&gt; 20;
+
+            -- 查询年龄大于等于20 小于等于30
+
+            SELECT * FROM student WHERE age &gt;= 20 &amp;&amp;  age &lt;=30;
+            SELECT * FROM student WHERE age &gt;= 20 AND  age &lt;=30;
+            SELECT * FROM student WHERE age BETWEEN 20 AND 30;
+
+            -- 查询年龄22岁，18岁，25岁的信息
+            SELECT * FROM student WHERE age = 22 OR age = 18 OR age = 25
+            SELECT * FROM student WHERE age IN (22,18,25);
+
+            -- 查询英语成绩为null
+            SELECT * FROM student WHERE english = NULL; -- 不对的。null值不能使用 = （!=） 判断
+
+            SELECT * FROM student WHERE english IS NULL;
+
+            -- 查询英语成绩不为null
+            SELECT * FROM student WHERE english  IS NOT NULL;
+
+
+
+            -- 查询姓马的有哪些？ like
+            SELECT * FROM student WHERE NAME LIKE &apos;马%&apos;;
+            -- 查询姓名第二个字是化的人
+
+            SELECT * FROM student WHERE NAME LIKE &quot;_化%&quot;;
+
+            -- 查询姓名是3个字的人
+            SELECT * FROM student WHERE NAME LIKE &apos;___&apos;;</code></pre><p>​                </p>
+<pre><code>-- 查询姓名中包含德的人
+SELECT * FROM student WHERE NAME LIKE &apos;%德%&apos;;</code></pre><p>​    </p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/05/MySQL%E7%AC%94%E8%AE%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-多线程的有关问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%9C%89%E5%85%B3%E9%97%AE%E9%A2%98/">多线程的有关问题</a>
+    </h1>
+  
+
+        
+        
+        <a href="/2020/02/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%9C%89%E5%85%B3%E9%97%AE%E9%A2%98/" class="archive-article-date">
+  	<time datetime="2020-02-05T07:02:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-05</time>
+</a>
+        
+      </header>
+    
+    <div align="center" class="post-count">
+    字数：1.1k字 | 预计阅读时长：4分钟
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-1-wait和sleep方法有什么区别"><a href="#1-1-wait和sleep方法有什么区别" class="headerlink" title="1.1. wait和sleep方法有什么区别"></a>1.1. wait和sleep方法有什么区别</h2><p>wait它必须书写在同步中，sleep可以在同步中也可以不再同步中。</p>
+<p>wait可以让线程处于等待状态，这时线程会释放锁。sleep如果书写在同步中，这时线程被休眠，不释放锁。</p>
+<p>wait 被等待的方法需要通过notify或notifyAll唤醒。sleep 时间到就会自动恢复到cpu的执行队列中</p>
+<p>wait可以指定时间也可以不指定时间，sleep必须指定时间。</p>
+<h2 id="1-2同步能不能直接加在run方法上？"><a href="#1-2同步能不能直接加在run方法上？" class="headerlink" title="1. 2同步能不能直接加在run方法上？"></a>1. 2同步能不能直接加在run方法上？</h2><p>按照同步的要求，方法上是可以加同步的。但是不能把同步添加在run方法上。</p>
+<p>添加在run方法上，就会导致任何线程进入run方法之前，先要获取到锁，而run方法是线程要执行的任务方法，线程都无法进入run方法，线程就无法获取到任务，当前线程就没有任何代码可以被运行。</p>
+<p>而获取到锁的线程，它会在run方法中运行，只有当前在run方法中的线程把run中的所有任务全部执行完成之后，才能结束，其他线程才能进入到run方法中。</p>
+<h2 id="1-3-线程名、线程组、线程的优先级"><a href="#1-3-线程名、线程组、线程的优先级" class="headerlink" title="1.3.线程名、线程组、线程的优先级"></a>1.3.线程名、线程组、线程的优先级</h2><p>线程名：使用Thread类中的getName方法可以直接获取。线程的名称默认Thread-x x从0开始。</p>
+<p>线程组：它是用来管理线程的。每个线程组中，可以保存多个线程。</p>
+<p>​    例如：生产者线程，可以保存到生产者线程组中。</p>
+<p>​    ThreadGroup  它可以管理其他的线程或者其他的线程组。</p>
+<p>线程优先级：创建的线程它们都有默认的优先级，优先级从1~10 使用10个数字表示，数字越小，优先级越低。</p>
+<p>​    <a href="#getPriority()"><strong><em>\</em>getPriority**</strong></a>()  获取当前线程的优先级</p>
+<p>​    <a href="#setPriority(int)"><strong><em>\</em>setPriority**</strong></a>(int newPriority) 设置当前线程的优先级</p>
+<p>​    一般设置优先级：1  5  10 采用这三个数字表示。</p>
+<p>​    高优先级的线程被CPU执行到的几率高。但不代表低优先级的线程cpu不执行。</p>
+<h2 id="1-4-Thread和Runnable区别"><a href="#1-4-Thread和Runnable区别" class="headerlink" title="1.4:Thread和Runnable区别"></a>1.4:Thread和Runnable区别</h2><p>Runnable相比Thread存在明显的优点，同时也是两者最大的区别。这点就不再做阐述，这里对于网络很多文章中存在的明显的错误文字总结进行一下论证：<br> <strong>Runnable可以实现多个相同的程序代码的线程去共享同一个资源，而Thread不可以？</strong><br> 我们以实际的代码样例来论证这个观点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyThread t1 = <span class="keyword">new</span> MyThread();</span><br><span class="line">        <span class="keyword">new</span> Thread(t1, <span class="string">"线程1"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(t1, <span class="string">"线程2"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> total = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (total &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                            System.out.println(Thread.currentThread().getName() + <span class="string">"卖票----&gt;"</span> + (<span class="keyword">this</span>.total--));</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https:////upload-images.jianshu.io/upload_images/5014400-8b01311d5d18cfe8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/478/format/webp" alt="img"></p>
+<p>Thread实现共享同一个资源.png</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Runnable 实现资源共享</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> itbird</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test3</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyRunable t1 = <span class="keyword">new</span> MyRunable();</span><br><span class="line">        <span class="keyword">new</span> Thread(t1, <span class="string">"线程1"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(t1, <span class="string">"线程2"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyRunable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> total = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (total &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                            System.out.println(Thread.currentThread().getName() + <span class="string">"卖票----&gt;"</span> + (<span class="keyword">this</span>.total--));</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https:////upload-images.jianshu.io/upload_images/5014400-72cca5b1a3934b54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/793/format/webp" alt="img"></p>
+<p>Runnable实现共享同一个资源.png</p>
+<p>经过实际样例代码编写以及运行结果对比，我们知道<strong>很多人说的Thread类不能共享资源，其实并不是不能，只是不适合</strong><br> 其实我们从Thread源码中也可以看到，当以Thread方式去实现资源共享时，实际上源码内部是将thread向下转型为了Runnable，实际上内部依然是以Runnable形式去实现的资源共享</p>
+<p><img src="https:////upload-images.jianshu.io/upload_images/5014400-853caced93c0667c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1036/format/webp" alt="img"></p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>1.Runnable和Thread相比优点有：<br> （1）由于Java不允许多继承，因此实现了Runnable接口可以再继承其他类，但是Thread明显不可以<br> （2）Runnable可以实现多个相同的程序代码的线程去共享同一个资源，而Thread并不是不可以，而是相比于Runnable来说，不太适合。<br> 2.Runnable为什么不可以直接run<br> 阐述文章中已有，Runnable其实相对于一个Task，并不具有线程的概念，如果你直接去调用Runnable的run，其实就是相当于直接在主线程中执行了一个函数而已，并未开启线程去执行。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">java多线程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%9C%89%E5%85%B3%E9%97%AE%E9%A2%98/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-单例设计模式懒汉式和饿汉式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/01/%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%87%92%E6%B1%89%E5%BC%8F%E5%92%8C%E9%A5%BF%E6%B1%89%E5%BC%8F/">单例设计模式懒汉式和饿汉式</a>
+    </h1>
+  
+
+        
+        
+        <a href="/2020/02/01/%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%87%92%E6%B1%89%E5%BC%8F%E5%92%8C%E9%A5%BF%E6%B1%89%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2020-02-01T07:01:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-01</time>
+</a>
+        
+      </header>
+    
+    <div align="center" class="post-count">
+    字数：1.1k字 | 预计阅读时长：4分钟
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一：什么是单例设计模式"><a href="#一：什么是单例设计模式" class="headerlink" title="一：什么是单例设计模式"></a>一：什么是单例设计模式</h1><p>它主要用来保证一个类在程序从启动到最后结束，这个类的对象只有一个，不能像其他新建对象那样可以随意new好多个对象。单例就是保证对象的唯一性。</p>
+<p>例如：</p>
+<p>下面这是一种创建方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Single</span></span>&#123;</span><br><span class="line">	<span class="comment">// 私有构造 防止外界随意创建本类对象</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Single</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="comment">//由于外界无法创建对象 所以只能本类创建自身对象</span></span><br><span class="line">	<span class="comment">//为了防止外界随意访问以及任意修改</span></span><br><span class="line">	<span class="comment">//所以对象实例使用private以及final修饰还需要静态修饰</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Single si = <span class="keyword">new</span> Single();</span><br><span class="line">	<span class="comment">//创建一个公开的返回自身对象实例静态的方法 用来给外界调用</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Single <span class="title">getSi</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> si;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//调用方法如下</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Single si = Single.getSi();<span class="comment">//外部只能通过调用里面的get方法才能访问里面唯一对象，</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还有另一种创建方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleDemo2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Single2 si = Single2.getSingle();</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Single2</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Single2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Single2 si = <span class="keyword">null</span>;<span class="comment">//先不new对象</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Single2 <span class="title">getSingle</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(si==<span class="keyword">null</span>)&#123;<span class="comment">//等到用的时候才判定是否new对象</span></span><br><span class="line">            si=<span class="keyword">new</span> Single2();</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="keyword">return</span> si; </span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="二：懒汉式和饿汉式"><a href="#二：懒汉式和饿汉式" class="headerlink" title="二：懒汉式和饿汉式"></a>二：懒汉式和饿汉式</h1><p>饿汉式：在类加载时就完成了初始化，所以类加载比较慢，但获取对象的速度快。</p>
+<p>懒汉式：就是将创建对象的时机进行推迟  什么时候使用什么时候在创建对象</p>
+<p>简而言之：先创建对象实例的叫饿汉式，那种只有在用到的时候再新建对象实例叫懒汉式。</p>
+<h2 id="优缺点："><a href="#优缺点：" class="headerlink" title="优缺点："></a>优缺点：</h2><p>饿汉式：这是比较常见的写法，在类加载的时候就完成了实例化，避免了多线程的同步问题。缺点也是有的，因为类加载时就实例化了，如果该实例没被使用，内存就浪费了。</p>
+<p>懒汉式：如下这是懒汉式中最简单的一种写法，只有在方法第一次被访问时才会实例化，达到了节省内存效果。但是这种写法有个致命的问题，就是多线程的安全问题。假设对象还没被new出来，然后有两个线程同时访问，那么就可能出现多次实例化的结果，导致对象不唯一了，违背了单例设计模式所以这种写法不可采用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Single2</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Single2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Single2 si = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Single2 <span class="title">getSingle</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(si==<span class="keyword">null</span>)&#123;</span><br><span class="line">            si=<span class="keyword">new</span> Single2();</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="keyword">return</span> si; </span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面是懒汉式的一种进阶写法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Single2</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Single2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Single2 si = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Single2 <span class="title">getSingle</span><span class="params">()</span></span>&#123;<span class="comment">//加了一个同步锁同一时间只能有一个线程可以进行实例化对象</span></span><br><span class="line">        <span class="keyword">if</span>(si==<span class="keyword">null</span>)&#123;</span><br><span class="line">            si=<span class="keyword">new</span> Single2();</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="keyword">return</span> si; </span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>缺点也是很明显的因为synchronized是修饰整个方法，每个线程访问都要进行同步，而其实这个方法只执行一次实例化代码就够了，每次都同步方法显然效率低下。</p>
+<p>下面是升华版：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Single2</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Single2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Single2 si = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Single2 <span class="title">getSingle</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(si==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span>(Single2<span class="class">.<span class="keyword">class</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(si==<span class="keyword">null</span>)&#123;</span><br><span class="line">            si=<span class="keyword">new</span> Single2();</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">            &#125;</span><br><span class="line">		<span class="keyword">return</span> si; </span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法如果一个线程已经实例化过对象了，那么其他线程在执行的时候只要在进行一次判断，发现这个对象已经实例化了，就不要在进行下面的操作了，从而提高了效率。</p>
+<h1 id="三：多线程中懒汉式和饿汉式"><a href="#三：多线程中懒汉式和饿汉式" class="headerlink" title="三：多线程中懒汉式和饿汉式"></a>三：多线程中懒汉式和饿汉式</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ex3</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Mythread mt=<span class="keyword">new</span> Mythread();</span><br><span class="line">		Thread t1=<span class="keyword">new</span> Thread(mt);</span><br><span class="line">		Thread t2=<span class="keyword">new</span> Thread(mt);</span><br><span class="line">		t1.start();</span><br><span class="line">		t2.start();</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mythread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Single si=Single.getSingle();</span><br><span class="line">		System.out.println(si);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//懒汉式</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Single</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Single</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Single si=<span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Single <span class="title">getSingle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(si==<span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(Single<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(si==<span class="keyword">null</span>) &#123;</span><br><span class="line">				si=<span class="keyword">new</span> Single();</span><br><span class="line">			&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> si;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//饿汉式</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Single2</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Single2</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Single2 si2=<span class="keyword">new</span> Single2();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Single2 <span class="title">getSingle2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> si2;</span><br><span class="line">    	</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/01/%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%87%92%E6%B1%89%E5%BC%8F%E5%92%8C%E9%A5%BF%E6%B1%89%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-java多线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -952,7 +1498,7 @@ setInterval("createtime()",250);
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 

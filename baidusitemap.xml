@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://yoursite.com/2020/04/24/Redis/</loc>
+    <loc>http://yoursite.com/2020/07/27/Jedis/</loc>
+    <lastmod>2021-03-26</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2020/07/26/Redis%E4%BA%8B%E5%8A%A1/</loc>
+    <lastmod>2021-03-26</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2020/07/24/Redis/</loc>
+    <lastmod>2021-03-26</lastmod>
+  </url>  <url>
+    <loc>http://yoursite.com/2020/11/25/Redis%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</loc>
     <lastmod>2021-03-25</lastmod>
   </url>  <url>
     <loc>http://yoursite.com/2020/09/18/%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1/</loc>
