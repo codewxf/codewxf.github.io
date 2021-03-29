@@ -150,6 +150,877 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Redis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/24/Redis/">Redis学习笔记</a>
+    </h1>
+  
+
+        
+        
+        <a href="/2020/07/24/Redis/" class="archive-article-date">
+  	<time datetime="2020-07-24T03:22:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-24</time>
+</a>
+        
+      </header>
+    
+    <div align="center" class="post-count">
+    字数：5.4k字 | 预计阅读时长：24分钟
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis是什么？"><a href="#Redis是什么？" class="headerlink" title="Redis是什么？"></a>Redis是什么？</h1><p>Redis 是一个远程字典服务</p>
+<p>是一个开源的使用ANSI  C 语言编写的，支持网络，可基于内存亦可以持久化的日志。KEY-VALUE 数据库 ，并且提供多钟语言的API</p>
+<p>redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。</p>
+<h2 id><a href="#" class="headerlink" title></a></h2><h1 id="Redis可以干嘛"><a href="#Redis可以干嘛" class="headerlink" title="Redis可以干嘛"></a>Redis可以干嘛</h1><ol>
+<li><p>内存存储，持久化，内存是断电即失的，所以说持久化很重要（rdb,aof）</p>
+</li>
+<li><p>效率高，可以用于高速缓存</p>
+</li>
+<li><p>发布订阅系统</p>
+</li>
+<li><p>地图信息分析</p>
+</li>
+<li><p>计时器，计数器（浏览量）</p>
+</li>
+</ol>
+<pre><code>特性</code></pre><ol>
+<li>多样的数据类型</li>
+<li>持久化</li>
+<li>集群</li>
+<li>事务</li>
+</ol>
+<h1 id="Redis常用指令"><a href="#Redis常用指令" class="headerlink" title="Redis常用指令"></a>Redis常用指令</h1><p>   首先在linux上安装完Redis ,以指定配置文件启动</p>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-server wxfconfig/redis.conf</span><br></pre></td></tr></table></figure>
+
+<p>   查看本机的6379端口的Redis服务  -p就是本机</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli -p 6379</span><br></pre></td></tr></table></figure>
+
+
+
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ping</span><br><span class="line">PONG</span><br><span class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> name wxf   //<span class="built_in">set</span>一个key的值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get name      //获取key的值</span><br><span class="line"><span class="string">"wxf"</span></span><br><span class="line">127.0.0.1:6379&gt; keys *     //查看所有的key</span><br><span class="line">1) <span class="string">"name"</span></span><br></pre></td></tr></table></figure>
+
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; shutdown   //关闭Redis</span><br><span class="line">not connected&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Redis测试工具"><a href="#Redis测试工具" class="headerlink" title="Redis测试工具"></a>Redis测试工具</h2><p>   <strong>redis-benchmark.exe</strong> </p>
+<p>   <img src="https://i.loli.net/2021/03/24/6HtUmZsg4iKbQ2x.png" alt="image.png"></p>
+<p>简单测试一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#测试：100个并发连接  100000请求</span><br><span class="line">redis-benchmark -h localhost -p 6379 -c 100 -n 100000</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/03/24/IRajW8BGnKqitzx.png" alt="image.png"></p>
+<h2 id="Redis常用指令-1"><a href="#Redis常用指令-1" class="headerlink" title="Redis常用指令"></a>Redis常用指令</h2><p>首先Redis默认有16个数据库 默认使用第0个  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select 2  &#x2F;&#x2F;切换Redis数据库</span><br><span class="line">set name wxf   &#x2F;&#x2F;set一个key和值</span><br><span class="line">get name      &#x2F;&#x2F;获取key的值</span><br><span class="line">keys *     &#x2F;&#x2F;查看所有的key</span><br><span class="line">flushdb &#x2F;&#x2F;清除当前数据库</span><br><span class="line">flushall &#x2F;&#x2F;清除所有数据库</span><br></pre></td></tr></table></figure>
+
+<p>Redis 5之前是单线程了6以后支持多线程了</p>
+<p>Redis是很快的，官方表示，Redis是基于内存操作，cpu不是Redis性能瓶颈，Redis的瓶颈是根据机器的内存和网络带宽，既然可以使用单线程来实现，就使用单线程了。</p>
+<p>Redis是C语言写的，官方提供的数据为100000+的QPS，完全不比同样是使用key-vale的Memecache差!</p>
+<p><strong>Redis为啥这么快呢？</strong></p>
+<p>1、误区1∶高性能的服务器一定是多线程的?</p>
+<p>2、误区2∶多线程（CPU上下文会切换!)一定比单线程效率高!<strong>不一定CPU切换效率会偏低</strong></p>
+<p>核心: redis是将所有的数据全部放在内存中的，所以说使用单线程去操作效率就是最高的，多线程(CPU上下文会切换︰耗时的操作!! !)，对于内存系统来说，如果没有上下文切换效率就是最高的!多次读写都是在一个CPU上的，在内存情况下，这个就是最佳的方案!</p>
+<hr>
+<p><strong><em>REmote DIctionary Server(Redis) 是一个由 Salvatore Sanfilippo 写的 key-value 存储系统，是跨平台的非关系型数据库。</em></strong></p>
+<p><strong><em>Redis 是一个开源的使用 ANSI C 语言编写、遵守 BSD 协议、支持网络、可基于内存、分布式、可选持久性的键值对(Key-Value)存储数据库，并提供多种语言的 API。</em></strong></p>
+<p><strong><em>Redis 通常被称为数据结构服务器，因为值（value）可以是字符串(String)、哈希(Hash)、列表(list)、集合(sets)和有序集合(sorted sets)等类型。</em></strong></p>
+<h2 id="Redis-keys-命令"><a href="#Redis-keys-命令" class="headerlink" title="Redis keys 命令"></a>Redis keys 命令</h2><table>
+<thead>
+<tr>
+<th>1</th>
+<th align="left"><a href="https://www.runoob.com/redis/keys-del.html" target="_blank" rel="noopener">DEL key</a> 该命令用于在 key 存在时删除 key。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-dump.html" target="_blank" rel="noopener">DUMP key</a>  序列化给定 key ，并返回被序列化的值。</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-exists.html" target="_blank" rel="noopener">EXISTS key</a>  检查给定 key 是否存在。</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-expire.html" target="_blank" rel="noopener">EXPIRE key</a> seconds 为给定 key 设置过期时间，以秒计。</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-expireat.html" target="_blank" rel="noopener">EXPIREAT key timestamp</a>  EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳(unix timestamp)。</td>
+</tr>
+<tr>
+<td>6</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-pexpire.html" target="_blank" rel="noopener">PEXPIRE key milliseconds</a>  设置 key 的过期时间以毫秒计。</td>
+</tr>
+<tr>
+<td>7</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-pexpireat.html" target="_blank" rel="noopener">PEXPIREAT key milliseconds-timestamp</a>  设置 key 过期时间的时间戳(unix timestamp) 以毫秒计</td>
+</tr>
+<tr>
+<td>8</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-keys.html" target="_blank" rel="noopener">KEYS pattern</a>  查找所有符合给定模式( pattern)的 key 。</td>
+</tr>
+<tr>
+<td>9</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-move.html" target="_blank" rel="noopener">MOVE key db</a>  将当前数据库的 key 移动到给定的数据库 db 当中。</td>
+</tr>
+<tr>
+<td>10</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-persist.html" target="_blank" rel="noopener">PERSIST key</a>  移除 key 的过期时间，key 将持久保持。</td>
+</tr>
+<tr>
+<td>11</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-pttl.html" target="_blank" rel="noopener">PTTL key</a>  以毫秒为单位返回 key 的剩余的过期时间。</td>
+</tr>
+<tr>
+<td>12</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-ttl.html" target="_blank" rel="noopener">TTL key</a>  以秒为单位，返回给定 key 的剩余生存时间(TTL, time to live)。</td>
+</tr>
+<tr>
+<td>13</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-randomkey.html" target="_blank" rel="noopener">RANDOMKEY</a>  从当前数据库中随机返回一个 key 。</td>
+</tr>
+<tr>
+<td>14</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-rename.html" target="_blank" rel="noopener">RENAME key newkey</a>  修改 key 的名称</td>
+</tr>
+<tr>
+<td>15</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-renamenx.html" target="_blank" rel="noopener">RENAMENX key newkey</a>  仅当 newkey 不存在时，将 key 改名为 newkey 。</td>
+</tr>
+<tr>
+<td>16</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-scan.html" target="_blank" rel="noopener">SCAN cursor [MATCH pattern] [COUNT count]</a>  迭代数据库中的数据库键。</td>
+</tr>
+<tr>
+<td>17</td>
+<td align="left"><a href="https://www.runoob.com/redis/keys-type.html" target="_blank" rel="noopener">TYPE key</a>  返回 key 所储存的值的类型。</td>
+</tr>
+</tbody></table>
+<h2 id="Redis-字符串命令"><a href="#Redis-字符串命令" class="headerlink" title="Redis 字符串命令"></a>Redis 字符串命令</h2><table>
+<thead>
+<tr>
+<th>1</th>
+<th><a href="https://www.runoob.com/redis/strings-set.html" target="_blank" rel="noopener">SET key value</a>  设置指定 key 的值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td><a href="https://www.runoob.com/redis/strings-get.html" target="_blank" rel="noopener">GET key</a>  获取指定 key 的值。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="https://www.runoob.com/redis/strings-getrange.html" target="_blank" rel="noopener">GETRANGE key start end</a>  返回 key 中字符串值的子字符</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://www.runoob.com/redis/strings-getset.html" target="_blank" rel="noopener">GETSET key value</a> 将给定 key 的值设为 value ，并返回 key 的旧值(old value)。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="https://www.runoob.com/redis/strings-getbit.html" target="_blank" rel="noopener">GETBIT key offset</a> 对 key 所储存的字符串值，获取指定偏移量上的位(bit)。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="https://www.runoob.com/redis/strings-mget.html" target="_blank" rel="noopener">MGET key1 [key2..]</a> 获取所有(一个或多个)给定 key 的值。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="https://www.runoob.com/redis/strings-setbit.html" target="_blank" rel="noopener">SETBIT key offset value</a> 对 key 所储存的字符串值，设置或清除指定偏移量上的位(bit)。</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="https://www.runoob.com/redis/strings-setex.html" target="_blank" rel="noopener">SETEX key seconds value</a> 将值 value 关联到 key ，并将 key 的过期时间设为 seconds (以秒为单位)。</td>
+</tr>
+<tr>
+<td>9</td>
+<td><a href="https://www.runoob.com/redis/strings-setnx.html" target="_blank" rel="noopener">SETNX key value</a> 只有在 key 不存在时设置 key 的值。</td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="https://www.runoob.com/redis/strings-setrange.html" target="_blank" rel="noopener">SETRANGE key offset value</a> 用 value 参数覆写给定 key 所储存的字符串值，从偏移量 offset 开始。</td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="https://www.runoob.com/redis/strings-strlen.html" target="_blank" rel="noopener">STRLEN key</a> 返回 key 所储存的字符串值的长度。</td>
+</tr>
+<tr>
+<td>12</td>
+<td><a href="https://www.runoob.com/redis/strings-mset.html" target="_blank" rel="noopener">MSET key value [key value …]</a> 同时设置一个或多个 key-value 对。</td>
+</tr>
+<tr>
+<td>13</td>
+<td><a href="https://www.runoob.com/redis/strings-msetnx.html" target="_blank" rel="noopener">MSETNX key value [key value …]</a>  同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在。</td>
+</tr>
+<tr>
+<td>14</td>
+<td><a href="https://www.runoob.com/redis/strings-psetex.html" target="_blank" rel="noopener">PSETEX key milliseconds value</a> 这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位。</td>
+</tr>
+<tr>
+<td>15</td>
+<td><a href="https://www.runoob.com/redis/strings-incr.html" target="_blank" rel="noopener">INCR key</a> 将 key 中储存的数字值增一。</td>
+</tr>
+<tr>
+<td>16</td>
+<td><a href="https://www.runoob.com/redis/strings-incrby.html" target="_blank" rel="noopener">INCRBY key increment</a> 将 key 所储存的值加上给定的增量值（increment） 。</td>
+</tr>
+<tr>
+<td>17</td>
+<td><a href="https://www.runoob.com/redis/strings-incrbyfloat.html" target="_blank" rel="noopener">INCRBYFLOAT key increment</a> 将 key 所储存的值加上给定的浮点增量值（increment） 。</td>
+</tr>
+<tr>
+<td>18</td>
+<td><a href="https://www.runoob.com/redis/strings-decr.html" target="_blank" rel="noopener">DECR key</a> 将 key 中储存的数字值减一。</td>
+</tr>
+<tr>
+<td>19</td>
+<td><a href="https://www.runoob.com/redis/strings-decrby.html" target="_blank" rel="noopener">DECRBY key decrement</a> key 所储存的值减去给定的减量值（decrement） 。</td>
+</tr>
+<tr>
+<td>20</td>
+<td><a href="https://www.runoob.com/redis/strings-append.html" target="_blank" rel="noopener">APPEND key value</a> 如果 key 已经存在并且是一个字符串， APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾。</td>
+</tr>
+</tbody></table>
+<p>有个比较重要的方法以后在分布式中会用到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#setex (set with expire) #设置过期时间</span></span><br><span class="line"><span class="comment">#setnx(set if not exist) #不存在设置</span></span><br><span class="line">127.0.0.1:6379&gt; setex key3 20 <span class="string">'hello'</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; ttl key3</span><br><span class="line">(<span class="built_in">integer</span>) 15</span><br><span class="line">127.0.0.1:6379&gt; ttl key3</span><br><span class="line">(<span class="built_in">integer</span>) 10</span><br><span class="line">127.0.0.1:6379&gt; ttl key3</span><br><span class="line">(<span class="built_in">integer</span>) -2</span><br><span class="line">127.0.0.1:6379&gt; setnx mykey <span class="string">'redis'</span>  //如果mykey不存在 就创建</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; setnx mykey <span class="string">'xixi'</span>  //如果存在，创建失败也不会报错</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; get mykey</span><br><span class="line"><span class="string">"redis"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line">=================================================================================</span><br><span class="line"><span class="comment">#Redis里面的操作都是原子操作，一起成功一起失败</span></span><br><span class="line"><span class="comment">#例子如下</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3 //同时设置多个值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; keys *</span><br><span class="line">1) <span class="string">"k1"</span></span><br><span class="line">2) <span class="string">"k3"</span></span><br><span class="line">3) <span class="string">"k2"</span></span><br><span class="line">127.0.0.1:6379&gt; mget k1 k2 k3  //同时获取多个值</span><br><span class="line">1) <span class="string">"v1"</span></span><br><span class="line">2) <span class="string">"v2"</span></span><br><span class="line">3) <span class="string">"v3"</span></span><br><span class="line">127.0.0.1:6379&gt; msetnx k1 123 k4 v4 //设置k1 如果存在失败</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line"><span class="string">"v1"</span></span><br><span class="line">127.0.0.1:6379&gt; get k4 </span><br><span class="line">(nil)</span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"></span><br><span class="line">==================================================================================</span><br><span class="line"></span><br><span class="line"><span class="comment">#Redis设置对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> user:1 &#123;name:zhangsan1,age:22&#125;  设置一个user:1对象 值为json字符串来保存一个对象</span><br><span class="line">127.0.0.1:6379&gt; mset user:1:name zhangsna user:1:age 22</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; mget user:1:name</span><br><span class="line">1) <span class="string">"zhangsna"</span></span><br><span class="line">127.0.0.1:6379&gt; mget user:1:name user:1:age</span><br><span class="line">1) <span class="string">"zhangsna"</span></span><br><span class="line">2) <span class="string">"22"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line">==================================================================================</span><br><span class="line"><span class="comment">#getset 先get再set   可以用来更新数据</span></span><br><span class="line">127.0.0.1:6379&gt; GETSET db redis</span><br><span class="line">(nil)</span><br><span class="line">127.0.0.1:6379&gt; get db</span><br><span class="line"><span class="string">"redis"</span></span><br><span class="line">127.0.0.1:6379&gt; getset db mysql</span><br><span class="line"><span class="string">"redis"</span></span><br><span class="line">127.0.0.1:6379&gt; get db</span><br><span class="line"><span class="string">"mysql"</span></span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+
+<p>数据结构是相同的</p>
+<p>String类型的使用场景：value除了是字符串还可以是数字</p>
+<ol>
+<li>计数器</li>
+<li>统计多单位的数量</li>
+<li>粉丝对象数</li>
+<li>对象缓存存储</li>
+</ol>
+<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-blpop.html" target="_blank" rel="noopener">BLPOP key1 [key2 ] timeout</a>  移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-brpop.html" target="_blank" rel="noopener">BRPOP key1 [key2 ] timeout</a>  移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-brpoplpush.html" target="_blank" rel="noopener">BRPOPLPUSH source destination timeout</a>  从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它； 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lindex.html" target="_blank" rel="noopener">LINDEX key index</a>  通过索引获取列表中的元素</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-linsert.html" target="_blank" rel="noopener">LINSERT key BEFORE|AFTER pivot value</a>  在列表的元素前或者后插入元素</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-llen.html" target="_blank" rel="noopener">LLEN key</a>  获取列表长度</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lpop.html" target="_blank" rel="noopener">LPOP key</a>  移出并获取列表的第一个元素</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lpush.html" target="_blank" rel="noopener">LPUSH key value1 [value2]</a>  将一个或多个值插入到列表头部</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lpushx.html" target="_blank" rel="noopener">LPUSHX key value</a>  将一个值插入到已存在的列表头部</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lrange.html" target="_blank" rel="noopener">LRANGE key start stop</a>  获取列表指定范围内的元素</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lrem.html" target="_blank" rel="noopener">LREM key count value</a>  移除列表元素</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-lset.html" target="_blank" rel="noopener">LSET key index value</a>  通过索引设置列表元素的值</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-ltrim.html" target="_blank" rel="noopener">LTRIM key start stop</a>  对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpop.html" target="_blank" rel="noopener">RPOP key</a>  移除列表的最后一个元素，返回值为移除的元素。</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpoplpush.html" target="_blank" rel="noopener">RPOPLPUSH source destination</a>  移除列表的最后一个元素，并将该元素添加到另一个列表并返回</td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpush.html" target="_blank" rel="noopener">RPUSH key value1 [value2]</a>  在列表中添加一个或多个值</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left"><a href="https://www.runoob.com/redis/lists-rpushx.html" target="_blank" rel="noopener">RPUSHX key value</a>  为已存在的列表添加值</td>
+</tr>
+</tbody></table>
+<p>基本的数据类型，列表</p>
+<p>在Redis里，可以把list搞成栈，队列，阻塞队列</p>
+<p>所有list的命令，都以L开头</p>
+<p>List</p>
+<p>(头部)  A=&gt;B=&gt;C=&gt;D(尾部部)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush list one  //讲一个值或者多个值添加到列表头部</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; lpush list two</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; lpush list three</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1  //获取所有的list中的值</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 1 //通过区间获取具体的值</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; Rpush list right //讲一个或者多个值，插入到列表尾部（右）</span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">4) <span class="string">"right"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">LPOP  //移除list的第一个元素</span><br><span class="line">RPOP  //移除list的最后一个元素</span><br><span class="line">127.0.0.1:6379&gt; Lpop list</span><br><span class="line"><span class="string">"three"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1</span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"one"</span></span><br><span class="line">3) <span class="string">"right"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">Lindex <span class="comment"># 通过角标获取list中的元素</span></span><br><span class="line">127.0.0.1:6379&gt; lindex list 0</span><br><span class="line"><span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">Llen  <span class="comment">#获得list的长度</span></span><br><span class="line">127.0.0.1:6379&gt; Llen list</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">移除指定的值</span><br><span class="line">Lrem</span><br><span class="line">127.0.0.1:6379&gt; lrem list 1 one  //移除list中一个one元素</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1 </span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"right"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">trim 修剪：list截断</span><br><span class="line">127.0.0.1:6379&gt; lpush mylist hello1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello2</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello3</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hello2"</span></span><br><span class="line">3) <span class="string">"hello3"</span></span><br><span class="line">127.0.0.1:6379&gt; LTRIM mylist 0 1</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hello2"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">rpoplpush //移除列表最后一个元素，将他移动到新的列表中</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; lpush mylist hello1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello2</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; rpush mylist hello3</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; rpoplpush mylist otherlist//移除列表最后一个元素，将他移动到新的列表中</span><br><span class="line"><span class="string">"hello3"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0-1</span><br><span class="line">(error) ERR wrong number of arguments <span class="keyword">for</span> <span class="string">'lrange'</span> <span class="built_in">command</span></span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hello2"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange otherlist 0 -1</span><br><span class="line">1) <span class="string">"hello3"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">lset <span class="comment">#将list指定下标替换为另一个值</span></span><br><span class="line"></span><br><span class="line">linsert <span class="comment">#往指定列表里面元素前面或者后面添加</span></span><br><span class="line">127.0.0.1:6379&gt; LINSERT mylist after hello1 hahaha</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) <span class="string">"hello1"</span></span><br><span class="line">2) <span class="string">"hahaha"</span></span><br><span class="line">3) <span class="string">"hello2"</span></span><br></pre></td></tr></table></figure>
+
+<p>小结：</p>
+<ul>
+<li>实际上是一个链表，before node after  left right都可以插入</li>
+<li>如果key不存在，创建新的链表</li>
+<li>如果key存在，新增内容</li>
+<li>如果移动了所有值，空链表也代表不存在</li>
+<li>在两边插入或者改动值，效率最高！ 中间元素相对效率会低一点</li>
+</ul>
+<p>可以用作消息排队！消息队列（Lpush Rpop）,栈（Lpush Lpop  ）</p>
+<h2 id="Set（集合）"><a href="#Set（集合）" class="headerlink" title="Set（集合）"></a>Set（集合）</h2><p>Set中的值是不能重复的</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sadd.html" target="_blank" rel="noopener">SADD key member1 [member2]</a>  向集合添加一个或多个成员</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-scard.html" target="_blank" rel="noopener">SCARD key</a>  获取集合的成员数</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sdiff.html" target="_blank" rel="noopener">SDIFF key1 [key2]</a>  返回第一个集合与其他集合之间的差异。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sdiffstore.html" target="_blank" rel="noopener">SDIFFSTORE destination key1 [key2]</a>  返回给定所有集合的差集并存储在 destination 中</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sinter.html" target="_blank" rel="noopener">SINTER key1 [key2]</a>  返回给定所有集合的交集</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sinterstore.html" target="_blank" rel="noopener">SINTERSTORE destination key1 [key2]</a>  返回给定所有集合的交集并存储在 destination 中</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sismember.html" target="_blank" rel="noopener">SISMEMBER key member</a>  判断 member 元素是否是集合 key 的成员</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-smembers.html" target="_blank" rel="noopener">SMEMBERS key</a>  返回集合中的所有成员</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-smove.html" target="_blank" rel="noopener">SMOVE source destination member</a>  将 member 元素从 source 集合移动到 destination 集合</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-spop.html" target="_blank" rel="noopener">SPOP key</a>  移除并返回集合中的一个随机元素</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-srandmember.html" target="_blank" rel="noopener">SRANDMEMBER key [count]</a>  返回集合中一个或多个随机数</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-srem.html" target="_blank" rel="noopener">SREM key member1 [member2]</a>  移除集合中一个或多个成员</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sunion.html" target="_blank" rel="noopener">SUNION key1 [key2]</a>  返回所有给定集合的并集</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sunionstore.html" target="_blank" rel="noopener">SUNIONSTORE destination key1 [key2]</a>  所有给定集合的并集存储在 destination 集合中</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left"><a href="https://www.runoob.com/redis/sets-sscan.html" target="_blank" rel="noopener">SSCAN key cursor [MATCH pattern] [COUNT count]</a>  迭代集合中的元素</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; sadd myset aaa   </span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd myset bbb</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset  //查看<span class="built_in">set</span>里面的数</span><br><span class="line">1) <span class="string">"bbb"</span></span><br><span class="line">2) <span class="string">"aaa"</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; SISMEMBER myset xxx  /判断xxx是否在<span class="built_in">set</span>里面</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; scard myset //查看<span class="built_in">set</span>里面内容元素个数</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; srem myset aaa   <span class="comment">#移除set中的指定元素</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"bbb"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"> <span class="built_in">set</span> 无序不重复集合。可以抽随机</span><br><span class="line"> 127.0.0.1:6379&gt; sadd myset 111</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd myset 222</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd myset 333</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER myset 1</span><br><span class="line"><span class="string">"222"</span></span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER myset  1<span class="comment">#随机抽取出指定个数的元素</span></span><br><span class="line"><span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">删除指定<span class="built_in">set</span>中，随机的一个值</span><br><span class="line">127.0.0.1:6379&gt; spop myset</span><br><span class="line"><span class="string">"222"</span></span><br><span class="line">127.0.0.1:6379&gt; spop myset</span><br><span class="line"><span class="string">"111"</span></span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">将一个指定的值，移动到另一个<span class="built_in">set</span>中</span><br><span class="line">127.0.0.1:6379&gt; sadd myset hello</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set1 word</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set1</span><br><span class="line">1) <span class="string">"word"</span></span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"hello"</span></span><br><span class="line">2) <span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; smove myset set1 hello</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS myset</span><br><span class="line">1) <span class="string">"333"</span></span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set1</span><br><span class="line">1) <span class="string">"word"</span></span><br><span class="line">2) <span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">社交网站的共同好友</span><br><span class="line">- 差集</span><br><span class="line">- 并集</span><br><span class="line">- 交集</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; sadd set1 a</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set1 b</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set1 c</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set2 c</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set2 d</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd set2 e</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SDIFF set1 set2 <span class="comment">#查看set1和set2的差集</span></span><br><span class="line">1) <span class="string">"a"</span></span><br><span class="line">2) <span class="string">"b"</span></span><br><span class="line">127.0.0.1:6379&gt; SINTER set1 set2<span class="comment">#查看set1和set2的交集</span></span><br><span class="line">1) <span class="string">"c"</span></span><br><span class="line">127.0.0.1:6379&gt; SUNION set1 set2<span class="comment">#查看set1和set2的并集</span></span><br><span class="line">1) <span class="string">"c"</span></span><br><span class="line">2) <span class="string">"a"</span></span><br><span class="line">3) <span class="string">"b"</span></span><br><span class="line">4) <span class="string">"d"</span></span><br><span class="line">5) <span class="string">"e"</span></span><br></pre></td></tr></table></figure>
+
+<p>应用场景</p>
+<ul>
+<li>A用户将所有的关注的人放在set中！可以做共同关注，</li>
+<li>共同爱好，二度理论</li>
+</ul>
+<h2 id="hash（哈希）"><a href="#hash（哈希）" class="headerlink" title="hash（哈希）"></a>hash（哈希）</h2><p>Map集合  key-MAP<KEY-VALUE>本质上和String类型没有太大区别</KEY-VALUE></p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hdel.html" target="_blank" rel="noopener">HDEL key field1 [field2]</a>  删除一个或多个哈希表字段</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hexists.html" target="_blank" rel="noopener">HEXISTS key field</a>  查看哈希表 key 中，指定的字段是否存在。</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hget.html" target="_blank" rel="noopener">HGET key field</a>  获取存储在哈希表中指定字段的值。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hgetall.html" target="_blank" rel="noopener">HGETALL key</a>  获取在哈希表中指定 key 的所有字段和值</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hincrby.html" target="_blank" rel="noopener">HINCRBY key field increment</a>  为哈希表 key 中的指定字段的整数值加上增量 increment 。</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hincrbyfloat.html" target="_blank" rel="noopener">HINCRBYFLOAT key field increment</a>  为哈希表 key 中的指定字段的浮点数值加上增量 increment 。</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hkeys.html" target="_blank" rel="noopener">HKEYS key</a>  获取所有哈希表中的字段</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hlen.html" target="_blank" rel="noopener">HLEN key</a>  获取哈希表中字段的数量</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hmget.html" target="_blank" rel="noopener">HMGET key field1 [field2]</a>  获取所有给定字段的值</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hmset.html" target="_blank" rel="noopener">HMSET key field1 value1 [field2 value2 ]</a>  同时将多个 field-value (域-值)对设置到哈希表 key 中。</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hset.html" target="_blank" rel="noopener">HSET key field value</a>  将哈希表 key 中的字段 field 的值设为 value 。</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hsetnx.html" target="_blank" rel="noopener">HSETNX key field value</a>  只有在字段 field 不存在时，设置哈希表字段的值。</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hvals.html" target="_blank" rel="noopener">HVALS key</a>  获取哈希表中所有值。</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/hashes-hscan.html" target="_blank" rel="noopener">HSCAN key cursor [MATCH pattern] [COUNT count]</a>  迭代哈希表中的键值对。</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset myhash f1 v1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hset myhash f2 v2 </span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hget myhash f1</span><br><span class="line"><span class="string">"v1"</span></span><br><span class="line">127.0.0.1:6379&gt; hmset myhash f3 v3 f4 v4</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; hmget myhash f1 f2 f3 f4</span><br><span class="line">1) <span class="string">"v1"</span></span><br><span class="line">2) <span class="string">"v2"</span></span><br><span class="line">3) <span class="string">"v3"</span></span><br><span class="line">4) <span class="string">"v4"</span></span><br><span class="line">127.0.0.1:6379&gt; HGETALL myhash</span><br><span class="line">1) <span class="string">"f1"</span></span><br><span class="line">2) <span class="string">"v1"</span></span><br><span class="line">3) <span class="string">"f2"</span></span><br><span class="line">4) <span class="string">"v2"</span></span><br><span class="line">5) <span class="string">"f3"</span></span><br><span class="line">6) <span class="string">"v3"</span></span><br><span class="line">7) <span class="string">"f4"</span></span><br><span class="line">8) <span class="string">"v4"</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; HDEL myhash f1</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; HGETALL myhash</span><br><span class="line">1) <span class="string">"f2"</span></span><br><span class="line">2) <span class="string">"v2"</span></span><br><span class="line">3) <span class="string">"f3"</span></span><br><span class="line">4) <span class="string">"v3"</span></span><br><span class="line">5) <span class="string">"f4"</span></span><br><span class="line">6) <span class="string">"v4"</span></span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; hlen myhash <span class="comment"># 获取hash  长度</span></span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; HEXISTS myhash f1  <span class="comment">#判断指定key是否在hash存在</span></span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; HEXISTS myhash f2</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; </span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"><span class="comment">#只获得所有的key</span></span><br><span class="line"><span class="comment">#只获获得所有的value</span></span><br><span class="line">127.0.0.1:6379&gt; hkeys myhash<span class="comment">#只获得所有的key</span></span><br><span class="line">1) <span class="string">"f2"</span></span><br><span class="line">2) <span class="string">"f3"</span></span><br><span class="line">3) <span class="string">"f4"</span></span><br><span class="line">127.0.0.1:6379&gt; HVALS myhash <span class="comment">#只获获得所有的value</span></span><br><span class="line">1) <span class="string">"v2"</span></span><br><span class="line">2) <span class="string">"v3"</span></span><br><span class="line">3) <span class="string">"v4"</span></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">incr  decr</span><br><span class="line">127.0.0.1:6379&gt; hset myhash f5 5</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; HINCRBY myhash f5 1  <span class="comment">#自增</span></span><br><span class="line">(<span class="built_in">integer</span>) 6</span><br><span class="line">127.0.0.1:6379&gt; hsetnx myhash f5 2  <span class="comment">#如果f5不存在就设置为2否则失败</span></span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; hsetnx myhash f6  3</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+
+<p>hash应用场景</p>
+<p>hash变更数据，user name age </p>
+<p>尤其是用户信息之类，经常变动的信息</p>
+<p>hash更适合对象的存储</p>
+<p>String适合字符串存储</p>
+<h2 id="Zset-有序集合"><a href="#Zset-有序集合" class="headerlink" title="Zset(有序集合)"></a>Zset(有序集合)</h2><p>在set的基础上，增加了一个值zset k1 score1  v1</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">命令及描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zadd.html" target="_blank" rel="noopener">ZADD key score1 member1 [score2 member2]</a>  向有序集合添加一个或多个成员，或者更新已存在成员的分数</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zcard.html" target="_blank" rel="noopener">ZCARD key</a>  获取有序集合的成员数</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zcount.html" target="_blank" rel="noopener">ZCOUNT key min max</a>  计算在有序集合中指定区间分数的成员数</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zincrby.html" target="_blank" rel="noopener">ZINCRBY key increment member</a>  有序集合中对指定成员的分数加上增量 increment</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zinterstore.html" target="_blank" rel="noopener">ZINTERSTORE destination numkeys key [key …]</a>  计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 destination 中</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zlexcount.html" target="_blank" rel="noopener">ZLEXCOUNT key min max</a>  在有序集合中计算指定字典区间内成员数量</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrange.html" target="_blank" rel="noopener">ZRANGE key start stop [WITHSCORES]</a>  通过索引区间返回有序集合指定区间内的成员</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrangebylex.html" target="_blank" rel="noopener">ZRANGEBYLEX key min max [LIMIT offset count]</a>  通过字典区间返回有序集合的成员</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrangebyscore.html" target="_blank" rel="noopener">ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]</a>  通过分数返回有序集合指定区间内的成员</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrank.html" target="_blank" rel="noopener">ZRANK key member</a>  返回有序集合中指定成员的索引</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrem.html" target="_blank" rel="noopener">ZREM key member [member …]</a>  移除有序集合中的一个或多个成员</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zremrangebylex.html" target="_blank" rel="noopener">ZREMRANGEBYLEX key min max</a>  移除有序集合中给定的字典区间的所有成员</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zremrangebyrank.html" target="_blank" rel="noopener">ZREMRANGEBYRANK key start stop</a>  移除有序集合中给定的排名区间的所有成员</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zremrangebyscore.html" target="_blank" rel="noopener">ZREMRANGEBYSCORE key min max</a>  移除有序集合中给定的分数区间的所有成员</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrevrange.html" target="_blank" rel="noopener">ZREVRANGE key start stop [WITHSCORES]</a>  返回有序集中指定区间内的成员，通过索引，分数从高到低</td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrevrangebyscore.html" target="_blank" rel="noopener">ZREVRANGEBYSCORE key max min [WITHSCORES]</a>  返回有序集中指定分数区间内的成员，分数从高到低排序</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zrevrank.html" target="_blank" rel="noopener">ZREVRANK key member</a>  返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序</td>
+</tr>
+<tr>
+<td align="left">18</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zscore.html" target="_blank" rel="noopener">ZSCORE key member</a>  返回有序集中，成员的分数值</td>
+</tr>
+<tr>
+<td align="left">19</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zunionstore.html" target="_blank" rel="noopener">ZUNIONSTORE destination numkeys key [key …]</a>  计算给定的一个或多个有序集的并集，并存储在新的 key 中</td>
+</tr>
+<tr>
+<td align="left">20</td>
+<td align="left"><a href="https://www.runoob.com/redis/sorted-sets-zscan.html" target="_blank" rel="noopener">ZSCAN key cursor [MATCH pattern] [COUNT count]</a>  迭代有序集合中的元素（包括元素成员和元素分值）</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd myset 1 one</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd myset 2 two</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd myset 3 three</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line">127.0.0.1:6379&gt; zadd sal 2000 xiaobai   <span class="comment">#添加用户薪水</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd sal 8000 wu</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd sal 300 zhangsan</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; ZRANGEBYSCORE sal -inf +inf  <span class="comment">#从小到大排序</span></span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"xiaobai"</span></span><br><span class="line">3) <span class="string">"wu"</span></span><br><span class="line">127.0.0.1:6379&gt; ZRANGEBYSCORE sal -inf +inf withscores <span class="comment">#带上分值</span></span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"300"</span></span><br><span class="line">3) <span class="string">"xiaobai"</span></span><br><span class="line">4) <span class="string">"2000"</span></span><br><span class="line">5) <span class="string">"wu"</span></span><br><span class="line">6) <span class="string">"8000"</span></span><br><span class="line">127.0.0.1:6379&gt; ZRANGEBYSCORE sal -inf 2500 withscores <span class="comment">#显示薪水小于2500的</span></span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"300"</span></span><br><span class="line">3) <span class="string">"xiaobai"</span></span><br><span class="line">4) <span class="string">"2000"</span></span><br><span class="line">127.0.0.1:6379&gt; ZREVRANGE sal 0 -1  <span class="comment">#降序排列</span></span><br><span class="line">1) <span class="string">"wu"</span></span><br><span class="line">2) <span class="string">"zhangsan"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; zrange sal 0 -1  </span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"xiaobai"</span></span><br><span class="line">3) <span class="string">"wu"</span></span><br><span class="line">127.0.0.1:6379&gt; zrem sal xiaobai  <span class="comment">#移除集合指定元素</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zrange sal 0 -1</span><br><span class="line">1) <span class="string">"zhangsan"</span></span><br><span class="line">2) <span class="string">"wu"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; zcard sal  <span class="comment">#获取有序集合元素的个数</span></span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line"><span class="comment">################################################################################</span></span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; zadd sal 3220 xixi</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zcount sal 5000 10000   <span class="comment">#获取指定区间内的元素</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+
+<p>使用场景：</p>
+<ul>
+<li>set排序，储存班级成绩</li>
+<li>消息排序，带权重。排行榜。</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/24/Redis/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-swagger" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/10/swagger/">swagger</a>
+    </h1>
+  
+
+        
+        
+        <a href="/2020/07/10/swagger/" class="archive-article-date">
+  	<time datetime="2020-07-10T05:52:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-10</time>
+</a>
+        
+      </header>
+    
+    <div align="center" class="post-count">
+    字数：889字 | 预计阅读时长：4分钟
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Swagger"><a href="#Swagger" class="headerlink" title="Swagger"></a>Swagger</h1><p>公司最近开始了一个新项目，采用的前后端分离的开发方式。现在总结一下。</p>
+<ul>
+<li>Swagger的作用和概念</li>
+<li>前后端分离</li>
+<li>在SpringBoot中集成Swagger</li>
+</ul>
+<h2 id="Swagger的作用和概念"><a href="#Swagger的作用和概念" class="headerlink" title="Swagger的作用和概念"></a>Swagger的作用和概念</h2><p>前后端分离<br>VUE+SpringBoot</p>
+<p>以前的开发是    后端时代:前端只用管理静态页面；html=&gt;后端。模板引擎JSP=&gt;后端是主力</p>
+<p>前后端分离式时代：</p>
+<ul>
+<li>·后端︰后端控制层，服务层，数据访问层【后端团队】</li>
+<li>·前端︰前端控制层，视图层【前端团队】</li>
+<li>前后端交互是通过===》API</li>
+<li>前后端相对独立，松耦合</li>
+<li>前后端可以部署在不同服务器上</li>
+</ul>
+<p>由此诞生出一个问题</p>
+<ul>
+<li>前后端集成联调，前后端人员对接不及时。</li>
+</ul>
+<p>解决方案</p>
+<ul>
+<li><p>制定开发手册，更新最新API</p>
+</li>
+<li><p>前后端分离测试：后端采用postman ，后端接口变动及时通知前端</p>
+</li>
+</ul>
+<h2 id="Swagger-1"><a href="#Swagger-1" class="headerlink" title="Swagger"></a>Swagger</h2><ul>
+<li>号称世界上最流行的API框架</li>
+<li>resultFul API 文档在线自动生成工具=》API文档与API定义同步更新</li>
+<li>直接运行，可在线测试接口</li>
+</ul>
+<h2 id="Springboot集成Swagger"><a href="#Springboot集成Swagger" class="headerlink" title="Springboot集成Swagger"></a>Springboot集成Swagger</h2><p>首先新建一个springboot项目导入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--导入swagger依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后新建一个配置类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.wxf.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.wxf.SwaggerdemoApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.swagger2.annotations.EnableSwagger2;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> wxf</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2<span class="comment">//开启Swagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span>   </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>运行项目打开</p>
+<p><a href="http://localhost:8080/swagger-ui.html地址会进入swagger页面" target="_blank" rel="noopener">http://localhost:8080/swagger-ui.html地址会进入swagger页面</a></p>
+<p><img src="https://i.loli.net/2021/03/23/8desQ9ScCnhEWpz.png" alt="image.png"></p>
+<h2 id="配置Swagger"><a href="#配置Swagger" class="headerlink" title="配置Swagger"></a>配置Swagger</h2><p>Swagger的bean实例Docket；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.wxf.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.wxf.SwaggerdemoApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.service.ApiInfo;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.service.Contact;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.service.VendorExtension;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.spi.DocumentationType;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.spring.web.plugins.Docket;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.swagger2.annotations.EnableSwagger2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> wxf</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2<span class="comment">//开启Swagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span>   </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置了Swagger2的docket的bean实例</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 配置swagger信息=apiinfo</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ApiInfo <span class="title">apiInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//作者信息</span></span><br><span class="line">        Contact contact = <span class="keyword">new</span> Contact(<span class="string">"wxf"</span>, <span class="string">"https://codewxf.github.io/"</span>, <span class="string">"1098897502@qq.com"</span>);</span><br><span class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> ApiInfo(</span><br><span class="line">                <span class="string">"我的SwaggerApi文档"</span>,</span><br><span class="line">                <span class="string">"这是一个低调的描述"</span>,</span><br><span class="line">                <span class="string">"v1.0"</span>,</span><br><span class="line">                <span class="string">"https://codewxf.github.io/"</span>,</span><br><span class="line">                contact,</span><br><span class="line">                <span class="string">"Apache 2.0"</span>,</span><br><span class="line">                <span class="string">"http://www.apache.org/licenses/LICENSE-2.0"</span>,</span><br><span class="line">                <span class="keyword">new</span> ArrayList&lt;VendorExtension&gt;());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置完如图</p>
+<p><img src="https://i.loli.net/2021/03/23/LYTmSu5pqHncyNo.png" alt="image.png"></p>
+<h2 id="Swagger配置扫描接口"><a href="#Swagger配置扫描接口" class="headerlink" title="Swagger配置扫描接口"></a>Swagger配置扫描接口</h2><p>Docket.select()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//配置了Swagger2的docket的bean实例</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">docket</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())</span><br><span class="line">            <span class="comment">//  .enable(false) Swagger禁用</span></span><br><span class="line"></span><br><span class="line">            .select().apis(</span><br><span class="line">            <span class="comment">//RequestHandlerselectors ,配置要扫描接口方式</span></span><br><span class="line">            <span class="comment">//basePackage指定扫描的包</span></span><br><span class="line">            <span class="comment">//any扫描全部</span></span><br><span class="line">            <span class="comment">//none 不扫描</span></span><br><span class="line">            <span class="comment">//withClassAnnotation 扫描类上的·注解</span></span><br><span class="line">            <span class="comment">//withMethodAnnotation 扫描方法上的·注解</span></span><br><span class="line">            <span class="comment">//RequestHandlerSelectors.withMethodAnnotation(GetMapping.class)</span></span><br><span class="line">            RequestHandlerSelectors.basePackage(<span class="string">"/com/wxf/controller"</span>)</span><br><span class="line">    )</span><br><span class="line">            <span class="comment">//paths过滤什么不扫描</span></span><br><span class="line">            <span class="comment">//.paths(PathSelectors.ant("/wxf/**"))</span></span><br><span class="line"></span><br><span class="line">            .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>配置API文档分组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupName();</span><br></pre></td></tr></table></figure>
+
+<p>配置多个Docket对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">docket1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">"A"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">docket2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">"B"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>实体类配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> wxf</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ApiModel</span>(<span class="string">"用户实体类"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ApiModelProperty</span>(<span class="string">"用户名"</span>)</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="meta">@ApiModelProperty</span>(<span class="string">"密码"</span>)</span><br><span class="line">    <span class="keyword">public</span> String pwd;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/03/23/ZtOxmnhXizsC8bB.png" alt="image.png"></p>
+<p>给接口加注释</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.wxf.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.wxf.pojo.User;</span><br><span class="line"><span class="keyword">import</span> io.swagger.annotations.ApiOperation;</span><br><span class="line"><span class="keyword">import</span> io.swagger.annotations.ApiParam;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> wxf</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello swagger"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation</span>(<span class="string">"hello控制类"</span>)</span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">user</span><span class="params">(@ApiParam(<span class="string">"用户名"</span>)</span> String name)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>可以给比较难理解的接口，对象做备注，</li>
+<li>可以实时更新。</li>
+<li>便于大型项目的开发</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">swagger</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/10/swagger/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-根据时间范围获得季度集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/03/%E6%A0%B9%E6%8D%AE%E6%97%B6%E9%97%B4%E8%8C%83%E5%9B%B4%E8%8E%B7%E5%BE%97%E5%AD%A3%E5%BA%A6%E9%9B%86/">根据时间范围获得季度集</a>
+    </h1>
+  
+
+        
+        
+        <a href="/2020/07/03/%E6%A0%B9%E6%8D%AE%E6%97%B6%E9%97%B4%E8%8C%83%E5%9B%B4%E8%8E%B7%E5%BE%97%E5%AD%A3%E5%BA%A6%E9%9B%86/" class="archive-article-date">
+  	<time datetime="2020-07-03T04:37:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-03</time>
+</a>
+        
+      </header>
+    
+    <div align="center" class="post-count">
+    字数：306字 | 预计阅读时长：1分钟
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在工作中接到一个需求是 根据时间范围获得季度集 写了一个工具类以便后续用到。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    *根据时间范围获得季度集</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">getRangeSet_Q</span><span class="params">(String beginDate, String endDate)</span></span>&#123;</span><br><span class="line">       List&lt;String&gt; rangeSet =<span class="keyword">null</span>;</span><br><span class="line">       SimpleDateFormat sdf = <span class="keyword">null</span>;</span><br><span class="line">       Date begin_date = <span class="keyword">null</span>;</span><br><span class="line">       Date end_date = <span class="keyword">null</span>;</span><br><span class="line">       String[] numStr =<span class="keyword">null</span>;</span><br><span class="line">       String Q=<span class="keyword">null</span>;</span><br><span class="line">       rangeSet = <span class="keyword">new</span> java.util.ArrayList&lt;String&gt;();</span><br><span class="line">       sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM"</span>);</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           begin_date = sdf.parse(beginDate);<span class="comment">//定义起始日期</span></span><br><span class="line">           end_date = sdf.parse(endDate);<span class="comment">//定义结束日期</span></span><br><span class="line">       &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">           System.out.println(<span class="string">"时间转化异常，请检查你的时间格式是否为yyyy-MM或yyyy-MM-dd"</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       Calendar dd = Calendar.getInstance();<span class="comment">//定义日期实例</span></span><br><span class="line">       dd.setTime(begin_date);<span class="comment">//设置日期起始时间</span></span><br><span class="line">       <span class="keyword">while</span>(!dd.getTime().after(end_date))&#123;<span class="comment">//判断是否到结束日期</span></span><br><span class="line">           numStr=  sdf.format(dd.getTime()).split(<span class="string">"-"</span>,<span class="number">0</span>);</span><br><span class="line">           Q = getQuarter(Integer.valueOf(numStr[<span class="number">1</span>]))+<span class="string">""</span>;</span><br><span class="line">          <span class="comment">// System.out.println(numStr[0].toString()+"年第"+Q+"季");</span></span><br><span class="line">           rangeSet.add(numStr[<span class="number">0</span>].toString()+<span class="string">"年第"</span>+Q+<span class="string">"季度"</span>);</span><br><span class="line">           dd.add(Calendar.MONTH, <span class="number">1</span>);<span class="comment">//进行当前日期月份加1</span></span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> rangeSet.stream().distinct().collect(Collectors.toList());<span class="comment">//去重返回</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 根据月获得季度</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> month  月</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span>  季度</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getQuarter</span><span class="params">(<span class="keyword">int</span> month)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(month == <span class="number">1</span> || month == <span class="number">2</span> || month == <span class="number">3</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(month == <span class="number">4</span> || month == <span class="number">5</span> || month == <span class="number">6</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span>  <span class="number">2</span>;</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(month == <span class="number">7</span> || month == <span class="number">8</span> || month == <span class="number">9</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="number">4</span>;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">小工具</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/03/%E6%A0%B9%E6%8D%AE%E6%97%B6%E9%97%B4%E8%8C%83%E5%9B%B4%E8%8E%B7%E5%BE%97%E5%AD%A3%E5%BA%A6%E9%9B%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Springboot-笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -4245,839 +5116,9 @@
 
 
   
-    <article id="post-html笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/16/html%E7%AC%94%E8%AE%B0/">html笔记</a>
-    </h1>
-  
-
-        
-        
-        <a href="/2020/02/16/html%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2020-02-16T11:33:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-16</time>
-</a>
-        
-      </header>
-    
-    <div align="center" class="post-count">
-    字数：3.4k字 | 预计阅读时长：16分钟
-</div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="web概念概述"><a href="#web概念概述" class="headerlink" title="web概念概述"></a>web概念概述</h2><pre><code>* JavaWeb：
-    * 使用Java语言开发基于互联网的项目
-
-* 软件架构：
-    1. C/S: Client/Server 客户端/服务器端
-        * 在用户本地有一个客户端程序，在远程有一个服务器端程序
-        * 如：QQ，迅雷...
-        * 优点：
-            1. 用户体验好
-        * 缺点：
-            1. 开发、安装，部署，维护 麻烦
-    2. B/S: Browser/Server 浏览器/服务器端
-        * 只需要一个浏览器，用户通过不同的网址(URL)，客户访问不同的服务器端程序
-        * 优点：
-            1. 开发、安装，部署，维护 简单
-        * 缺点：
-            1. 如果应用过大，用户的体验可能会受到影响
-            2. 对硬件要求过高
-
-* B/S架构详解
-    * 资源分类：
-        1. 静态资源：
-            * 使用静态网页开发技术发布的资源。
-            * 特点：
-                * 所有用户访问，得到的结果是一样的。
-                * 如：文本，图片，音频、视频, HTML,CSS,JavaScript
-                * 如果用户请求的是静态资源，那么服务器会直接将静态资源发送给浏览器。浏览器中内置了静态资源的解析引擎，可以展示静态资源
-        2. 动态资源：
-            * 使用动态网页及时发布的资源。
-            * 特点：
-                * 所有用户访问，得到的结果可能不一样。
-                * 如：jsp/servlet,php,asp...
-                * 如果用户请求的是动态资源，那么服务器会执行动态资源，转换为静态资源，再发送给浏览器
-
-
-    * 我们要学习动态资源，必须先学习静态资源！
-
-    * 静态资源：
-        * HTML：用于搭建基础网页，展示页面的内容
-        * CSS：用于美化页面，布局页面
-        * JavaScript：控制页面的元素，让页面有一些动态的效果</code></pre><h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><pre><code>1. 概念：是最基础的网页开发语言
-    * Hyper Text Markup Language 超文本标记语言
-        * 超文本:
-            * 超文本是用超链接的方法，将各种不同空间的文字信息组织在一起的网状文本.
-        * 标记语言:
-            * 由标签构成的语言。&lt;标签名称&gt; 如 html，xml
-            * 标记语言不是编程语言
-
-2. 快速入门：
-    * 语法：
-        1. html文档后缀名 .html 或者 .htm
-        2. 标签分为
-            1. 围堵标签：有开始标签和结束标签。如 &lt;html&gt; &lt;/html&gt;
-            2. 自闭和标签：开始标签和结束标签在一起。如 &lt;br/&gt;
-
-        3. 标签可以嵌套：
-            需要正确嵌套，不能你中有我，我中有你
-            错误：&lt;a&gt;&lt;b&gt;&lt;/a&gt;&lt;/b&gt;
-            正确：&lt;a&gt;&lt;b&gt;&lt;/b&gt;&lt;/a&gt;
-
-        4. 在开始标签中可以定义属性。属性是由键值对构成，值需要用引号(单双都可)引起来
-        5. html的标签不区分大小写，但是建议使用小写。
-
-    * 代码：
-        &lt;html&gt;
-
-            &lt;head&gt;
-                &lt;title&gt;title&lt;/title&gt;
-            &lt;/head&gt;
-
-            &lt;body&gt;
-                &lt;FONT color=&apos;red&apos;&gt;Hello World&lt;/font&gt;&lt;br/&gt;
-
-                &lt;font color=&apos;green&apos;&gt;Hello World&lt;/font&gt;
-
-            &lt;/body&gt;
-
-        &lt;/html&gt;
-
-3. 标签学习：
-    1. 文件标签：构成html最基本的标签
-        * html:html文档的根标签
-        * head：头标签。用于指定html文档的一些属性。引入外部的资源
-        * title：标题标签。
-        * body：体标签
-        * &lt;!DOCTYPE html&gt;：html5中定义该文档是html文档
-    2. 文本标签：和文本有关的标签
-        * 注释：&lt;!-- 注释内容 --&gt;
-        * &lt;h1&gt; to &lt;h6&gt;：标题标签
-            * h1~h6:字体大小逐渐递减
-        * &lt;p&gt;：段落标签
-        * &lt;br&gt;：换行标签
-        * &lt;hr&gt;：展示一条水平线
-            * 属性：
-                * color：颜色
-                * width：宽度
-                * size：高度
-                * align：对其方式
-                    * center：居中
-                    * left：左对齐
-                    * right：右对齐
-        * &lt;b&gt;：字体加粗
-        * &lt;i&gt;：字体斜体
-        * &lt;font&gt;:字体标签
-        * &lt;center&gt;:文本居中
-            * 属性：
-                * color：颜色
-                * size：大小
-                * face：字体
-
-        * 属性定义：
-            * color：
-                1. 英文单词：red,green,blue
-                2. rgb(值1，值2，值3)：值的范围：0~255  如  rgb(0,0,255)
-                3. #值1值2值3：值的范围：00~FF之间。如： #FF00FF
-            * width：
-                1. 数值：width=&apos;20&apos; ,数值的单位，默认是 px(像素)
-                2. 数值%：占比相对于父元素的比例
-
-
-    3. 图片标签：
-        * img：展示图片
-            * 属性：
-                * src：指定图片的位置
-
-        * 代码：
-             &lt;!--展示一张图片 img--&gt;
-
-            &lt;img src=&quot;image/jingxuan_2.jpg&quot; align=&quot;right&quot; alt=&quot;古镇&quot; width=&quot;500&quot; height=&quot;500&quot;/&gt;
-
-            &lt;!--
-                相对路径
-                    * 以.开头的路径
-                        * ./：代表当前目录  ./image/1.jpg
-                        * ../:代表上一级目录
-             --&gt;
-
-            &lt;img src=&quot;./image/jiangwai_1.jpg&quot;&gt;
-
-            &lt;img src=&quot;../image/jiangwai_1.jpg&quot;&gt;
-    4. 列表标签：
-        * 有序列表：
-            * ol:
-            * li:
-        * 无序列表：
-            * ul:
-            * li:
-    5. 链接标签：
-        * a:定义一个超链接
-            * 属性：
-                * href：指定访问资源的URL(统一资源定位符)
-                * target：指定打开资源的方式
-                    * _self:默认值，在当前页面打开
-                    * _blank：在空白页面打开
-
-        * 代码：
-             &lt;!--超链接  a--&gt;
-
-            &lt;a href=&quot;http://www.itcast.cn&quot;&gt;点我&lt;/a&gt;
-            &lt;br&gt;
-
-            &lt;a href=&quot;http://www.itcast.cn&quot; target=&quot;_self&quot;&gt;点我&lt;/a&gt;
-            &lt;br&gt;
-            &lt;a href=&quot;http://www.itcast.cn&quot; target=&quot;_blank&quot;&gt;点我&lt;/a&gt;
-
-            &lt;br&gt;
-
-            &lt;a href=&quot;./5_列表标签.html&quot;&gt;列表标签&lt;/a&gt;&lt;br&gt;
-            &lt;a href=&quot;mailto:itcast@itcast.cn&quot;&gt;联系我们&lt;/a&gt;
-
-            &lt;br&gt;
-            &lt;a href=&quot;http://www.itcast.cn&quot;&gt;&lt;img src=&quot;image/jiangwai_1.jpg&quot;&gt;&lt;/a&gt;
-    6. div和span：
-        * div:每一个div占满一整行。块级标签
-        * span：文本信息在一行展示，行内标签 内联标签
-
-    7. 语义化标签：html5中为了提高程序的可读性，提供了一些标签。
-        1. &lt;header&gt;：页眉
-        2. &lt;footer&gt;：页脚
-
-
-    8. 表格标签：
-        * table：定义表格
-            * width：宽度
-            * border：边框
-            * cellpadding：定义内容和单元格的距离
-            * cellspacing：定义单元格之间的距离。如果指定为0，则单元格的线会合为一条、
-            * bgcolor：背景色
-            * align：对齐方式
-        * tr：定义行
-            * bgcolor：背景色
-            * align：对齐方式
-        * td：定义单元格
-            * colspan：合并列
-            * rowspan：合并行
-        * th：定义表头单元格
-        * &lt;caption&gt;：表格标题
-        * &lt;thead&gt;：表示表格的头部分
-        * &lt;tbody&gt;：表示表格的体部分
-        * &lt;tfoot&gt;：表示表格的脚部分</code></pre><h2 id="案例：旅游网站首页"><a href="#案例：旅游网站首页" class="headerlink" title="案例：旅游网站首页"></a>案例：旅游网站首页</h2><pre><code>1. 确定使用table来完成布局    
-2. 如果某一行只有一个单元格，则使用&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
-3. 如果某一行有多个单元格，则使用
-    &lt;tr&gt;
-        &lt;td&gt;
-            &lt;table&gt;&lt;/table&gt;
-        &lt;/td&gt;
-    &lt;/tr&gt;
-
-4. 代码实现
-
-    &lt;!DOCTYPE html&gt;
-    &lt;html lang=&quot;en&quot;&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot;&gt;
-        &lt;title&gt;黑马旅游网&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-
-        &lt;!--采用table来完成布局--&gt;
-        &lt;!--最外层的table，用于整个页面的布局--&gt;
-        &lt;table width=&quot;100%&quot; align=&quot;center&quot;&gt;
-           &lt;!-- 第1行 --&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;img src=&quot;image/top_banner.jpg&quot; width=&quot;100%&quot; alt=&quot;&quot;&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;!-- 第2行 --&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;table width=&quot;100%&quot; align=&quot;center&quot;&gt;
-                        &lt;tr&gt;
-                            &lt;td&gt;
-                                &lt;img src=&quot;image/logo.jpg&quot; alt=&quot;&quot;&gt;
-                            &lt;/td&gt;
-                            &lt;td&gt;
-                                &lt;img src=&quot;image/search.png&quot; alt=&quot;&quot;&gt;
-                            &lt;/td&gt;
-                            &lt;td&gt;
-                                &lt;img src=&quot;image/hotel_tel.png&quot; alt=&quot;&quot;&gt;
-                            &lt;/td&gt;
-                        &lt;/tr&gt;
-                    &lt;/table&gt;
-
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;!-- 第3行 --&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;table width=&quot;100%&quot; align=&quot;center&quot;&gt;
-                        &lt;tr bgcolor=&quot;#ffd700&quot; align=&quot;center&quot; height=&quot;45&quot; &gt;
-                            &lt;td&gt;
-                                &lt;a href=&quot;&quot;&gt;首页&lt;/a&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-                                门票
-                            &lt;/td&gt;
-                        &lt;/tr&gt;
-                    &lt;/table&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;!-- 第4行 轮播图 --&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;img src=&quot;image/banner_3.jpg&quot; alt=&quot;&quot; width=&quot;100%&quot;&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;!-- 第5行 旅游精选--&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;img src=&quot;image/icon_5.jpg&quot; alt=&quot;&quot;&gt;
-                    旅游精选
-                    &lt;hr  color=&quot;#ffd700&quot; &gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;!-- 第6行 --&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;table align=&quot;center&quot; width=&quot;95%&quot;&gt;
-                        &lt;tr&gt;
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_1.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 899&lt;/font&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_1.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 899&lt;/font&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_1.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 899&lt;/font&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_1.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 899&lt;/font&gt;
-                            &lt;/td&gt;
-                        &lt;/tr&gt;
-                    &lt;/table&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;!-- 第7行 国内游 --&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;img src=&quot;image/icon_6.jpg&quot; alt=&quot;&quot;&gt;
-                    国内游
-                    &lt;hr  color=&quot;#ffd700&quot; &gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;!-- 第8行 --&gt;
-            &lt;tr&gt;
-                &lt;td&gt;
-                    &lt;table align=&quot;center&quot; width=&quot;95%&quot;&gt;
-                        &lt;tr&gt;
-                            &lt;td rowspan=&quot;2&quot;&gt;
-                                &lt;img src=&quot;image/guonei_1.jpg&quot; alt=&quot;&quot;&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_2.jpg&quot; alt=&quot;&quot; height=&quot;100%&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_2.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_2.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                            &lt;/td&gt;
-                        &lt;/tr&gt;
-
-                        &lt;tr&gt;
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_2.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_2.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                            &lt;/td&gt;
-
-                            &lt;td&gt;
-
-                                &lt;img src=&quot;image/jiangxuan_2.jpg&quot; alt=&quot;&quot;&gt;
-                                &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                                &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                            &lt;/td&gt;</code></pre><p>​        </p>
-<pre><code>            &lt;/tr&gt;
-        &lt;/table&gt;
-    &lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;!-- 第9行 境外游 --&gt;
-&lt;tr&gt;
-    &lt;td&gt;
-        &lt;img src=&quot;image/icon_7.jpg&quot; alt=&quot;&quot;&gt;
-        境外游
-        &lt;hr  color=&quot;#ffd700&quot; &gt;
-    &lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;!-- 第10行 --&gt;
-&lt;tr&gt;
-    &lt;td&gt;
-        &lt;table align=&quot;center&quot; width=&quot;95%&quot;&gt;
-            &lt;tr&gt;
-                &lt;td rowspan=&quot;2&quot;&gt;
-                    &lt;img src=&quot;image/jiangwai_1.jpg&quot; alt=&quot;&quot;&gt;
-                &lt;/td&gt;
-
-                &lt;td&gt;
-
-                    &lt;img src=&quot;image/jiangxuan_3.jpg&quot; alt=&quot;&quot; height=&quot;100%&quot;&gt;
-                    &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                    &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                &lt;/td&gt;
-
-                &lt;td&gt;
-
-                   &lt;img src=&quot;image/jiangxuan_3.jpg&quot; alt=&quot;&quot;&gt;
-                    &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                    &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                &lt;/td&gt;
-
-                &lt;td&gt;
-
-                   &lt;img src=&quot;image/jiangxuan_3.jpg&quot; alt=&quot;&quot;&gt;
-                    &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                    &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-
-            &lt;tr&gt;
-                &lt;td&gt;
-
-                   &lt;img src=&quot;image/jiangxuan_3.jpg&quot; alt=&quot;&quot;&gt;
-                    &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                    &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                &lt;/td&gt;
-
-                &lt;td&gt;
-
-                   &lt;img src=&quot;image/jiangxuan_3.jpg&quot; alt=&quot;&quot;&gt;
-                    &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                    &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                &lt;/td&gt;
-
-                &lt;td&gt;
-
-                   &lt;img src=&quot;image/jiangxuan_3.jpg&quot; alt=&quot;&quot;&gt;
-                    &lt;p&gt;上海飞三亚五天4晚自由行(春节销售+亲子+蜜月+自由行)&lt;/p&gt;
-                    &lt;font color=&quot;red&quot;&gt;&amp;yen; 699&lt;/font&gt;
-                &lt;/td&gt;</code></pre><p>​        </p>
-<pre><code>                &lt;/tr&gt;
-            &lt;/table&gt;
-        &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;!-- 第11行 --&gt;
-    &lt;tr&gt;
-        &lt;td&gt;
-            &lt;img src=&quot;image/footer_service.png&quot; alt=&quot;&quot; width=&quot;100%&quot;&gt;
-        &lt;/td&gt;
-    &lt;/tr&gt;
-
-    &lt;!-- 第12行 --&gt;
-    &lt;tr&gt;
-        &lt;td align=&quot;center&quot; bgcolor=&quot;#ffd700&quot; height=&quot;40&quot;&gt;
-            &lt;font color=&quot;gray&quot; size=&quot;2&quot;&gt;
-            江苏南京旅游有限公司
-            版权所有Copyright 2006-2018&amp;copy;, All Rights Reserved 苏ICP备16007882
-            &lt;/font&gt;
-        &lt;/td&gt;
-    &lt;/tr&gt;
-
-&lt;/table&gt;</code></pre><p>​        </p>
-<pre><code>&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">html</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/16/html%E7%AC%94%E8%AE%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-java反射" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/09/java%E5%8F%8D%E5%B0%84/">java反射</a>
-    </h1>
-  
-
-        
-        
-        <a href="/2020/02/09/java%E5%8F%8D%E5%B0%84/" class="archive-article-date">
-  	<time datetime="2020-02-09T05:44:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-09</time>
-</a>
-        
-      </header>
-    
-    <div align="center" class="post-count">
-    字数：874字 | 预计阅读时长：3分钟
-</div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="反射：框架设计的灵魂"><a href="#反射：框架设计的灵魂" class="headerlink" title="反射：框架设计的灵魂"></a>反射：框架设计的灵魂</h2><p><img src="https://i.loli.net/2020/02/09/O9C8mFvloqIpf2A.png" alt="V_Y_DLHFOL_MRU_RVEU_K_N.png"></p>
-<pre><code>* 框架：半成品软件。可以在框架的基础上进行软件开发，简化编码
-* 反射：将类的各个组成部分封装为其他对象，这就是反射机制
-    * 好处：
-        1. 可以在程序运行过程中，操作这些对象。
-        2. 可以解耦，提高程序的可扩展性。
-
-
-* 获取Class对象的方式：
-    1. Class.forName(&quot;全类名&quot;)：将字节码文件加载进内存，返回Class对象
-        * 多用于配置文件，将类名定义在配置文件中。读取文件，加载类
-    2. 类名.class：通过类名的属性class获取
-        * 多用于参数的传递
-    3. 对象.getClass()：getClass()方法在Object类中定义着。
-        * 多用于对象的获取字节码的方式
-
-    * 结论：
-        同一个字节码文件(*.class)在一次程序运行过程中，只会被加载一次，不论通过哪一种方式获取的Class对象都是同一个。
-
-
-* Class对象功能：
-    * 获取功能：
-        1. 获取成员变量们
-            * Field[] getFields() ：获取所有public修饰的成员变量
-            * Field getField(String name)   获取指定名称的 public修饰的成员变量
-
-            * Field[] getDeclaredFields()  获取所有的成员变量，不考虑修饰符
-            * Field getDeclaredField(String name)  
-        2. 获取构造方法们
-            * Constructor&lt;?&gt;[] getConstructors()  
-            * Constructor&lt;T&gt; getConstructor(类&lt;?&gt;... parameterTypes)  
-
-            * Constructor&lt;T&gt; getDeclaredConstructor(类&lt;?&gt;... parameterTypes)  
-            * Constructor&lt;?&gt;[] getDeclaredConstructors()  
-        3. 获取成员方法们：
-            * Method[] getMethods()  
-            * Method getMethod(String name, 类&lt;?&gt;... parameterTypes)  
-
-            * Method[] getDeclaredMethods()  
-            * Method getDeclaredMethod(String name, 类&lt;?&gt;... parameterTypes)  
-
-        4. 获取全类名    
-            * String getName()  
-
-
-* Field：成员变量
-    * 操作：
-        1. 设置值
-            * void set(Object obj, Object value)  
-        2. 获取值
-            * get(Object obj) 
-
-        3. 忽略访问权限修饰符的安全检查
-            * setAccessible(true):暴力反射
-
-
-
-* Constructor:构造方法
-    * 创建对象：
-        * T newInstance(Object... initargs)  
-
-        * 如果使用空参数构造方法创建对象，操作可以简化：Class对象的newInstance方法
-
-
-* Method：方法对象
-    * 执行方法：
-        * Object invoke(Object obj, Object... args)  
-
-    * 获取方法名称：
-        * String getName:获取方法名</code></pre><ul>
-<li>案例：<ul>
-<li>需求：写一个”框架”，不能改变该类的任何代码的前提下，可以帮我们创建任意类的对象，并且执行其中任意方法<ul>
-<li>实现：<ol>
-<li>配置文件</li>
-<li>反射</li>
-</ol>
-</li>
-<li>步骤：<ol>
-<li>将需要创建的对象的全类名和需要执行的方法定义在配置文件中</li>
-<li>在程序中加载读取配置文件</li>
-<li>使用反射技术来加载类文件进内存</li>
-<li>创建对象</li>
-<li>执行方法</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> ex;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ex4</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args, String className)</span> <span class="keyword">throws</span>  Exception</span>&#123;</span><br><span class="line">		<span class="comment">//加载配置文件</span></span><br><span class="line">		<span class="comment">//1.1创建properties对象</span></span><br><span class="line">		Properties p=<span class="keyword">new</span> Properties();</span><br><span class="line">		<span class="comment">//1.2加载配置文件，转为一个集合</span></span><br><span class="line">		<span class="comment">//1.2.1获取class目录下的配置文件</span></span><br><span class="line">		ClassLoader classLoader = ex4<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span>;</span><br><span class="line">        InputStream resourceAsStream = classLoader.getResourceAsStream(<span class="string">"pr.properties"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">			p.load(resourceAsStream);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//获取配置文件中定义的数据</span></span><br><span class="line">        String classname = p.getProperty(<span class="string">"className"</span>);</span><br><span class="line">        String methodname = p.getProperty(<span class="string">"methodName"</span>);</span><br><span class="line">        <span class="comment">//加载该类进内存</span></span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(className);</span><br><span class="line">        <span class="comment">//创建对象</span></span><br><span class="line">        Object obj = cls.newInstance();</span><br><span class="line">        <span class="comment">//获取对象</span></span><br><span class="line">        Method method = cls.getMethod(methodname);</span><br><span class="line">        <span class="comment">//执行方法</span></span><br><span class="line">        method.invoke(obj);</span><br><span class="line">        </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//properties类</span></span><br><span class="line">className=ex.Person</span><br><span class="line">methodName=eat</span><br><span class="line"><span class="comment">//Person类</span></span><br><span class="line">    <span class="keyword">package</span> ex;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Person [name="</span> + name + <span class="string">", age="</span> + age + <span class="string">"]"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> name;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.name = name;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> age;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.age = age;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	System.out.println(<span class="string">"吃吃吃吃吃吃吃"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">java反射</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/09/java%E5%8F%8D%E5%B0%84/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-使用线程池改写生产者消费者模型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/07/%E4%BD%BF%E7%94%A8%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%94%B9%E5%86%99%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B/">使用线程池改写生产者消费者模型</a>
-    </h1>
-  
-
-        
-        
-        <a href="/2020/02/07/%E4%BD%BF%E7%94%A8%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%94%B9%E5%86%99%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B/" class="archive-article-date">
-  	<time datetime="2020-02-07T05:28:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-07</time>
-</a>
-        
-      </header>
-    
-    <div align="center" class="post-count">
-    字数：376字 | 预计阅读时长：2分钟
-</div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>生产者消费者图示</p>
-<p><img src="https://img2018.cnblogs.com/blog/1172467/201910/1172467-20191023094234145-2032367505.png" alt="img"></p>
-<p>举例如下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.LinkedBlockingQueue;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerConsumer</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> queueSize = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> producerNum = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> consumerNum = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//创建一个阻塞队列</span></span><br><span class="line">    <span class="keyword">private</span> LinkedBlockingQueue&lt;E&gt; blockingQueue = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//生产者线程池</span></span><br><span class="line">    <span class="keyword">private</span> ExecutorService producerTheadPool = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//消费者线程池</span></span><br><span class="line">    <span class="keyword">private</span> ExecutorService consumerTheadPool = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ProducerConsumer</span><span class="params">()</span></span>&#123;</span><br><span class="line">    blockingQueue = <span class="keyword">new</span> LinkedBlockingQueue&lt;&gt;(queueSize);</span><br><span class="line">    producerTheadPool = Executors.newFixedThreadPool(producerNum);</span><br><span class="line">    consumerTheadPool = Executors.newFixedThreadPool(consumerNum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ProducerConsumer</span><span class="params">(<span class="keyword">int</span> queueSize, <span class="keyword">int</span> producerNum, <span class="keyword">int</span> consumerNum)</span></span>&#123;</span><br><span class="line">    blockingQueue = <span class="keyword">new</span> LinkedBlockingQueue&lt;&gt;(queueSize);</span><br><span class="line">    producerTheadPool = Executors.newFixedThreadPool(producerNum);</span><br><span class="line">    consumerTheadPool = Executors.newFixedThreadPool(consumerNum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">produceEleAsync</span><span class="params">(E ele)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!checkSuccess())&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Producer&lt;E&gt; producer = <span class="keyword">new</span> Producer&lt;E&gt;(<span class="keyword">this</span>.blockingQueue, ele);</span><br><span class="line">    producerTheadPool.execute(producer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//执行消费过程</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">consumeEleAsync</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!checkSuccess())&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    E ele = blockingQueue.take();<span class="comment">//阻塞获取数据</span></span><br><span class="line">                    Consumer&lt;E&gt; consumer = <span class="keyword">new</span> Consumer&lt;E&gt;(ele);</span><br><span class="line">                    consumerTheadPool.execute(consumer);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//判空检查</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">checkSuccess</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(blockingQueue!=<span class="keyword">null</span></span><br><span class="line">            &amp;&amp; producerTheadPool!=<span class="keyword">null</span></span><br><span class="line">            &amp;&amp; consumerTheadPool!=<span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生产者</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Producer</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> LinkedBlockingQueue&lt;E&gt; blockingQueue;</span><br><span class="line">    <span class="keyword">private</span> E ele;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Producer</span><span class="params">(LinkedBlockingQueue&lt;E&gt; blockingQueue, E ele)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.blockingQueue = blockingQueue;</span><br><span class="line">        <span class="keyword">this</span>.ele = ele;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.blockingQueue!=<span class="keyword">null</span> &amp;&amp; ele!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.blockingQueue.put(ele);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.getStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//消费者</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> E ele;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Consumer</span><span class="params">(E ele)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.ele = ele;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//执行消费过程</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(ele!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.println(<span class="string">"消费---&gt;"</span> + ele.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>}</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">java多线程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/07/%E4%BD%BF%E7%94%A8%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%94%B9%E5%86%99%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
     </nav>
   
 
