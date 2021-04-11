@@ -150,6 +150,116 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-搭建hexo博客踩的坑" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/22/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2%E8%B8%A9%E7%9A%84%E5%9D%91/">搭建hexo博客踩的坑</a>
+    </h1>
+  
+
+        
+        
+        <a href="/2019/12/22/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2%E8%B8%A9%E7%9A%84%E5%9D%91/" class="archive-article-date">
+  	<time datetime="2019-12-22T07:18:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-22</time>
+</a>
+        
+      </header>
+    
+    <div align="center" class="post-count">
+    字数：661字 | 预计阅读时长：2分钟
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我的博客是基于hexo和github进行搭建的，搭建过程也是有点艰辛，下面分享一下我踩的坑。<strong>我的操作系统是win10</strong>。</p>
+<hr>
+<p><code>npm install 报错sill pacote range manifest for hmac-drbg@^1.0.0 fetched</code></p>
+<p>这报错的原因一般是你拷贝的源出现了问题。可以执行以下以下代码</p>
+<p><code>npm install -g cnpm --registry=https://registry.npm.taobao.org</code></p>
+<p>以上代码安装的是淘宝的镜像源。</p>
+<p>输入后可以输入cnpm验证是否成功。</p>
+<p>安装hexo用<code>cnpm install -g hexo-cli</code></p>
+<hr>
+<p><code>hexo init</code></p>
+<p>这一步是安装hexo博客的重要的一步，主要是生成最初的格式，但是到了INFO Install dependencies这一步会因为资源或者什么原因会卡死。可以ctrl+c 终止一下。然后输入 <code>cnpm install</code>重新下载node_modules文件夹，实测下载会快很多。</p>
+<hr>
+<p><code>Hexo s 提示 Local hexo not found in XXX</code></p>
+<p>例如</p>
+<p><code>ERROR Local hexo not found in G:\XcantloadX
+ERROR Try running: &#39;npm install hexo --save&#39;</code></p>
+<p>这也需要打开你的博客文件夹找到node_modules文件夹 ，重新下载运行</p>
+<p><code>cnpm install</code></p>
+<p>重新hexo s</p>
+<p>问题解决</p>
+<hr>
+<p><code>hexo d命令报错 ERROR Deployer not found: git</code></p>
+<p>我已经在站点配置文件中写入了：</p>
+<p>deploy:<br>  type: git<br>  repo: <a href="mailto:git@github.com">git@github.com</a>:xxxxx/xxxxx.github.io.git  # Github pages地址<br>  branch: master<br>但是执行，hexo d报错：</p>
+<p>ERROR Deployer not found: git<br>这是因为没安装hexo-deployer-git插件，在根目录下输入下面的插件安装</p>
+<p>npm install hexo-deployer-git –save<br>然后在使用Hexo  d命令就可以推送了。</p>
+<hr>
+<p>执行<code>npm install</code>的时候报错<code>npm ERR! Unexpected end of JSON input while parsing near &#39;...sh_time&quot;:141072930277&#39;</code></p>
+<p>直接执行 npm cache clean –force, 如果执行成功，再npm install即可。<br>如果执行失败，请先升级npm，即npm i -g npm, 最后再执行npm cache clean –force, 最后再npm install.<br>如果还执行失败，那就先npm cache verify,再npm cache clean –force，最后再npm install。<br>如果还是执行失败，那么恭喜你，跟我一样了。我也是这样走到这一步的。那就往复的执行 【先npm cache clean –force再npm install】，一直到npm cache clean –force执行成功即可，然后npm install即成功。</p>
+<p>别忘了，往复的执行 【先<code>npm cache clean --force</code>再<code>npm install</code>】。多试几遍就可以了。</p>
+<hr>
+<p>在搭建时候我遇到最坑的事情是我在搭建完了博客后在post文件夹下删除了helloword.md文件，结果Hexo博客出现“Cannot GET/xxx”错误。这是当你创建了一个post后你的helloword才能删除，也就是说你要先hexo new post “xxxx”后这个helloword才能删除不然会报错！！！这个我还傻乎乎的重新搭建了一次。</p>
+<hr>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/22/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2%E8%B8%A9%E7%9A%84%E5%9D%91/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-我的第一篇博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -406,6 +516,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">SpringCloud</a>
               </li>
             
             <div class="clearfix"></div>
