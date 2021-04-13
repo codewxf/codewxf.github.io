@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-04-12T13:38:46.297Z</updated>
+  <updated>2021-04-12T13:42:31.083Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2021/03/12/%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A2%AB%E6%94%BB%E5%87%BB%EF%BC%8C%E5%90%AF%E7%A4%BA%E5%BD%95/"/>
     <id>http://yoursite.com/2021/03/12/%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A2%AB%E6%94%BB%E5%87%BB%EF%BC%8C%E5%90%AF%E7%A4%BA%E5%BD%95/</id>
     <published>2021-03-12T12:28:26.000Z</published>
-    <updated>2021-04-12T13:38:46.297Z</updated>
+    <updated>2021-04-12T13:42:31.083Z</updated>
     
-    <content type="html"><![CDATA[<p>​      今天公司一个php的老项目被攻击了，对方掌握了我们公司数据库的密码。威胁老板说，不给钱就删库了。我听说了这件事，让老板莫慌，连忙去服务器上备份了数据库并且下载到本地了。随后便让老板去怼那个“脚本小子”了。</p><p>​    随后我看看了看我们公司这个老古董项目。</p><p><img src="http://a1.qpic.cn/psc?/V10y1TYV2VyByO/oGEovji5dOWVs5ze3TLFdijWJAeAfyDCuVMxmQjohZIFeFMj3s2gcTetxEB4DyViGes4Ni*qWGFFii*Ld7VMHg!!/c&ek=1&kp=1&pt=0&bo=6QNYAukDWAIRECc!&t=5&tl=3&vuin=1098897502&tm=1618232400&sce=60-2-2&rf=0-0" alt></p><p>  不出意外，以前老项目的sql查询，图省事都是拼接起来的，很容易被sql注入，算是一个低级漏洞了。这么多年没被攻击也挺神奇的。</p><p>随后我本地修改了代码，全部改为了参数化查询。然后建议老板重新换个服务器因为很有可能被人上传了webshell等脚本。Mysql也不能直接装到web服务器上的，有很大危险。</p><p>最后做个总结吧，也算给自己提个醒：</p><ul><li>解决SQL注入问题最好的方式就是参数化查询，一劳永逸。</li><li>Mysql不能直接装到web服务器上的，别人直接用一个udf提权漏洞就能往你们服务器上上传文件。</li><li>网站那个服务不用root来链接数据库，要用最小的权限去链接，运行mysql服务器的操作系统也要用最小的权限。包括那些plugin的那些文件，做严格的设置</li></ul><p>最好的方式就是：直接买那个mysql云服务器实例，阿里的腾讯的都行。里面都帮你配置好了，还有独有的安全防火墙，甚至还有自动快照，非常有效的解决了数据的安全问题。</p>]]></content>
+    <content type="html"><![CDATA[<p>​      今天公司一个php的老项目被攻击了，对方掌握了我们公司数据库的密码。威胁老板说，不给钱就删库了。我听说了这件事，让老板莫慌，连忙去服务器上备份了数据库并且下载到本地了。随后便让老板去怼那个“脚本小子”了。</p><p>​    随后我看看了看我们公司这个老古董项目。</p><p>  不出意外，以前老项目的sql查询，图省事都是拼接起来的，很容易被sql注入，算是一个低级漏洞了。这么多年没被攻击也挺神奇的。</p><p>随后我本地修改了代码，全部改为了参数化查询。然后建议老板重新换个服务器因为很有可能被人上传了webshell等脚本。Mysql也不能直接装到web服务器上的，有很大危险。</p><p>最后做个总结吧，也算给自己提个醒：</p><ul><li>解决SQL注入问题最好的方式就是参数化查询，一劳永逸。</li><li>Mysql不能直接装到web服务器上的，别人直接用一个udf提权漏洞就能往你们服务器上上传文件。</li><li>网站那个服务不用root来链接数据库，要用最小的权限去链接，运行mysql服务器的操作系统也要用最小的权限。包括那些plugin的那些文件，做严格的设置</li></ul><p>最好的方式就是：直接买那个mysql云服务器实例，阿里的腾讯的都行。里面都帮你配置好了，还有独有的安全防火墙，甚至还有自动快照，非常有效的解决了数据的安全问题。</p>]]></content>
     
     <summary type="html">
     
